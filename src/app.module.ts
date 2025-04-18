@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './modules/user-modules/user/user.module';
+import { UsersModule } from './modules/user-modules/users/users.module';
 import { RolsModule } from './modules/user-modules/rols/rols.module';
 import { RequestsInvestigatorModule } from './modules/user-modules/requests-investigator/requests-investigator.module';
 import { DownloadUsersModule } from './modules/user-modules/download-users/download-users.module';
@@ -13,7 +13,7 @@ import { CommentComplaintsModule } from './modules/complaint-modules/comment-com
 import { PostComplaintsModule } from './modules/complaint-modules/post-complaints/post-complaints.module';
 import { DepartamentsModule } from './modules/location-modules/departaments/departaments.module';
 import { CitiesModule } from './modules/location-modules/cities/cities.module';
-import { FileModule } from './modules/file-modules/file/file.module';
+import { FileModule } from './modules/files/files.module';
 import { LogsModule } from './modules/logs/logs.module';
 import { PostsModule } from './modules/post-modules/posts/posts.module';
 import { PostTypesModule } from './modules/post-modules/post-types/post-types.module';
@@ -33,9 +33,16 @@ import { SurveysModule } from './modules/survey-modules/surveys/surveys.module';
 import { SurveysAnsweredModule } from './modules/survey-modules/surveys-answered/surveys-answered.module';
 import { QuestionsModule } from './modules/survey-modules/question-modules/questions/questions.module';
 import { QuestionAnswersModule } from './modules/survey-modules/question-modules/question-answers/question-answers.module';
+import { ConfigModule } from './config/config.module';
+import { ConfigService } from './config/config.service';
+import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './modules/auth/auth.module';
 @Module({
   imports: [
-    UserModule,
+    ConfigModule,
+    DatabaseModule,
+    AuthModule,
+    UsersModule,
     RolsModule,
     RequestsInvestigatorModule,
     DownloadUsersModule,
@@ -71,4 +78,28 @@ import { QuestionAnswersModule } from './modules/survey-modules/question-modules
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule implements OnModuleInit{
+  constructor(private readonly config: ConfigService) {}
+  onModuleInit() {
+    console.log('✅ PORT:', this.config.get('PORT'));
+  console.log('✅ LOGS:', this.config.get('LOGS'));
+
+  console.log('🗄️ DB_HOST:', this.config.get('DB_HOST'));
+  console.log('🗄️ DB_PORT:', this.config.get('DB_PORT'));
+  console.log('🗄️ DB_USER:', this.config.get('DB_USER'));
+  console.log('🗄️ DB_PASSWORD:', this.config.get('DB_PASSWORD'));
+  console.log('🗄️ DB_NAME:', this.config.get('DB_NAME'));
+
+  console.log('📧 USER_EMAIL:', this.config.get('USER_EMAIL'));
+  console.log('📧 PASS_AUTH:', this.config.get('PASS_AUTH'));
+
+  console.log('🔐 JWT_SECRET:', this.config.get('JWT_SECRET'));
+  console.log('🔐 JWT_TIME_EXPIRE:', this.config.get('JWT_TIME_EXPIRE'));
+
+  console.log('📁 FILE_SYSTEM_HOST:', this.config.get('FILE_SYSTEM_HOST'));
+  console.log('🧾 PDF_SERVICE_URL:', this.config.get('PDF_SERVICE_URL'));
+
+  console.log('🔑 GOOGLE_CLIENT_ID:', this.config.get('GOOGLE_CLIENT_ID'));
+  console.log('🔑 GOOGLE_CLIENT_SECRET:', this.config.get('GOOGLE_CLIENT_SECRET'));
+  }
+}
