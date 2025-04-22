@@ -16,8 +16,18 @@ export class EventsService {
 		return 'This action adds a new event';
 	}
 
-	findAll() {
-		return `This action returns all events`;
+	async findAll() {
+		const events = await this.eventRepository.find({
+			relations: {
+				city: {
+					departament: true
+				}
+			},
+			order: {
+				createdAt: 'DESC'
+			}
+		})
+		return events;
 	}
 
 	async findOne(id: number) {

@@ -12,7 +12,7 @@ import { StorageService } from 'src/micro-services/storage/storage.service';
 import { PostStatusesService } from '../../post-statuses/services/post-statuses.service';
 import { EventsService } from '../../event-modules/events/services/events.service';
 import { PostTagsService } from '../../tag-modules/post-tags/post-tags.service';
-import { TagsService } from '../../tag-modules/tags/tags.service';
+import { TagsService } from '../../tag-modules/tags/services/tags.service';
 
 @Injectable()
 export class PostsService {
