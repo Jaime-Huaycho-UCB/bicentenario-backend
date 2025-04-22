@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Departament } from "../../departaments/entities/departament.entity";
 import { Post } from "src/modules/post-modules/posts/entities/post.entity";
+import { Event } from "src/modules/post-modules/event-modules/events/entities/event.entity";
 
 @Entity('cities')
 export class City {
@@ -22,4 +23,7 @@ export class City {
 
     @OneToMany(() => Post,(post) => post.city)
     posts: Post[]
+
+    @OneToMany(() => Event,(event) => event.city)
+    events: Event[]
 }

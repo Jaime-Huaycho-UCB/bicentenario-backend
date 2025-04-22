@@ -44,8 +44,10 @@ export class UserAuthService {
             name: data.name,
             email: data.email,
             password: data.password ? await this.hashService.hash(data.password!) : undefined,
+            age: data.age,
+            strikes: 0,
             rol: {id: 2},
-            isDelete: false
+            isDeleted: false
         };
         const savedUser = await this.userRepository.save(user);
         return savedUser;

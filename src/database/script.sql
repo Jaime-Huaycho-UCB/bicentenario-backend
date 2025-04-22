@@ -4,6 +4,7 @@ create table departaments (
     name varchar(100) not null,
     primary key (id_departament)
 );
+select * from departaments;
 -- Insertando los departamentos
 INSERT INTO departaments (name) VALUES
 ('La Paz'),
@@ -26,6 +27,7 @@ create table cities (
     primary key (id_city),
     Foreign Key (id_departament) REFERENCES departaments(id_departament)
 );
+select * from cities;
 -- Insertando ciudades con latitud y longitud
 INSERT INTO cities (name, id_departament, latitude, longitude) VALUES
 -- La Paz
@@ -89,12 +91,32 @@ INSERT INTO cities (name, id_departament, latitude, longitude) VALUES
 
 -- Fin - Localizaciones
 
+-- Inicio - Eventos
+create table events (
+    id_event bigserial,
+    title varchar(200) not null,
+    description varchar(800) not null,
+    content varchar(2000) not null,
+    id_city int not null,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    primary key (id_event),
+    Foreign Key (id_city) REFERENCES cities(id_city)
+);
+-- Fin - Eventos
+
+
 -- Inicio - Usuario
 create table rols (
     id_rol Serial,
     name varchar(50) not null,
     primary key (id_rol)
 );
+select * from rols;
+insert into rols(id_rol,name) values 
+(1,'Administrador'),
+(2,'Curador'),
+(3,'Investigador'),
+(4,'Visitante');
 
 create table users (
     id_user bigserial,
@@ -103,33 +125,24 @@ create table users (
     password varchar(300) not null,
     age numeric(3,0) not null,
     id_rol int not null,
-    strikes numeric(1,0) not null,
-    is_deleted boolean not null,
+    strikes numeric(1,0) default 0,
+    is_deleted boolean default false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key (id_user),
     Foreign Key (id_rol) REFERENCES rols(id_rol) on delete cascade
 );
+select * from users;
 
--- subinicio - Para colecciones de usuario
 create table user_folders (
     id_folder bigserial,
     id_user bigint not null,
     name varchar(100) not null,
     is_deleted boolean default false,
-    create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key (id_folder),
-    Foreign Key (id_user) REFERENCES users(id_user) on delete cascade,
+    Foreign Key (id_user) REFERENCES users(id_user) on delete cascade
 );
-
-create table folder_posts (
-    id_fp bigserial,
-    id_folder bigint not null,
-    id_post bigint not null,
-    primary key (id_fp),
-    Foreign Key (id_folder) REFERENCES user_folders(id_folder) on delete cascade,
-    Foreign Key (id_post) REFERENCES posts(id_post) on delete cascade
-);
--- subfin - Para colecciones de usuario
 
 -- subInicio - Para solicitudes para ser investigador
 create table investigator_requests (
@@ -139,34 +152,10 @@ create table investigator_requests (
     justification varchar(800) not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key (id_request),
-    Foreign Key (id_user) REFERENCES users(id_user) on delete cascade,
+    Foreign Key (id_user) REFERENCES users(id_user) on delete cascade
 );
 -- subFin - Para solicitudes para ser investigador
--- subInicio - Para el registro de descargar de usuario
-create table user_downloads (
-    id_download bigserial,
-    id_user bigint not null,
-    id_post bigint not null,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    primary key (id_download),
-    Foreign Key (id_user) REFERENCES users(id_user) on delete cascade,
-    Foreign Key (id_post) REFERENCES posts(id_post) on delete cascade
-);
--- subFin - Para el registro de descargar de usuario
 
--- subInicio - Para el historia del usuario
-create table history_posts (
-    id_history bigserial,
-    id_user bigint not null,
-    id_post bigint not null,
-    is_deleted boolean default false,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    primary key (id_history),
-    Foreign Key (id_user) REFERENCES users(id_user) on delete cascade,
-    Foreign Key (id_post) REFERENCES posts(id_post) on delete cascade
-);
--- subfin - Para el historia del usuario
 -- Fin - Usuario
 
 -- Inicio - Publicacion
@@ -199,7 +188,7 @@ create table posts (
     id_user bigserial not null,
     title varchar(300) not null,
     description varchar(800) not null,
-    star_average numeric(5,0) default 0,
+    stars numeric(6,1) default 0,
     views bigint default 0,
     likes int default 0,
     dislikes int default 0,
@@ -207,11 +196,12 @@ create table posts (
     type numeric(1,0),
     id_file int,
     content text,
+    is_published boolean default false,
+    id_curator bigint,
     id_status int not null,
     id_head int,
     id_child int,
-    id_curator bigint,
-    id_event bigint not null,
+    id_event bigint,
     is_deleted boolean default false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -224,13 +214,50 @@ create table posts (
     Foreign Key (id_event) REFERENCES events(id_event) on delete cascade
 );
 
+-- subInicio - Para el registro de descargar de usuario
+create table user_downloads (
+    id_download bigserial,
+    id_user bigint not null,
+    id_post bigint not null,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    primary key (id_download),
+    Foreign Key (id_user) REFERENCES users(id_user) on delete cascade,
+    Foreign Key (id_post) REFERENCES posts(id_post) on delete cascade
+);
+-- subFin - Para el registro de descargar de usuario
+
+-- subInicio - Para el historia del usuario
+create table history_posts (
+    id_history bigserial,
+    id_user bigint not null,
+    id_post bigint not null,
+    is_deleted boolean default false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    primary key (id_history),
+    Foreign Key (id_user) REFERENCES users(id_user) on delete cascade,
+    Foreign Key (id_post) REFERENCES posts(id_post) on delete cascade
+);
+-- subfin - Para el historia del usuario
+
+-- subInicio - Para colecciones de usuario
+create table folder_posts (
+    id_fp bigserial,
+    id_folder bigint not null,
+    id_post bigint not null,
+    primary key (id_fp),
+    Foreign Key (id_folder) REFERENCES user_folders(id_folder) on delete cascade,
+    Foreign Key (id_post) REFERENCES posts(id_post) on delete cascade
+);
+-- subfin - Para colecciones de usuario
+
 create table post_starts (
     id_start bigserial,
     id_post bigint not null,
     id_user bigint not null,
     number numeric(1,0) not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    primary key (post_starts),
+    primary key (id_start),
     Foreign Key (id_user) REFERENCES users(id_user) on delete cascade,
     Foreign Key (id_post) REFERENCES posts(id_post) on delete cascade
 );
@@ -271,7 +298,6 @@ for each row
 execute function update_post_interaction();
 -- subFin - trigger - Para aumentar likes o dislikes en comentarios
 -- subFin - interacion de post
-
 
 
 -- subInicio - Para comentarios de post
@@ -332,6 +358,7 @@ create table tags (
     name varchar(50) not null,
     primary key (id_tag)
 );
+select * from tags;
 INSERT INTO tags (name) VALUES
 ('Bicentenario'),
 ('Independencia'),
@@ -398,11 +425,12 @@ create table complaint_statuses (
     primary key (id_status)
 );
 
-create table objects (
+create table objects_complaint (
     id_object serial,
     name varchar(50) not null,
     primary key (id_object)
 );
+insert into objects_complaint (name) values ('Testimonio'),('Comenntario');
 
 create table complaints (
     id_complaint serial,
@@ -413,21 +441,10 @@ create table complaints (
     is_revised boolean default false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key (id_complaint),
-    Foreign Key (id_object) REFERENCES objects(id_object),
+    Foreign Key (id_object) REFERENCES objects_complaint(id_object),
     Foreign Key (id_status) REFERENCES complaint_statuses(id_status)
 );
 -- Fin - Denuncias
-
--- Inicio - Eventos
-create table events (
-    id_event bigserial,
-    title varchar(200) not null,
-    description varchar(800) not null,
-    content varchar(2000) not null,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    primary key (id_event)
-);
--- Fin - Eventos
 
 -- Inicio - Foros
 create table post_forums (
@@ -472,6 +489,7 @@ create table surveys (
     id_survey bigserial,
     title varchar(400) not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    primary key (id_survey)
 );
 create table survey_questions (
     id_question bigserial not null,
@@ -489,8 +507,8 @@ create table surveys_answered (
     id_user bigint not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key (id_sa),
-    Foreign Key (id_post) REFERENCES posts(id_post) on delete cascade
-    Foreign Key (id_survey) REFERENCES surveys(id_survey) on delete cascade
+    Foreign Key (id_post) REFERENCES posts(id_post) on delete cascade,
+    Foreign Key (id_survey) REFERENCES surveys(id_survey) on delete cascade,
     Foreign Key (id_user) REFERENCES users(id_user) on delete cascade
 );
 create table question_answers (

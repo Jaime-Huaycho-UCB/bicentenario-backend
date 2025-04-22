@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
-import { DepartamentsService } from './departaments.service';
+import { DepartamentsService } from './services/departaments.service';
 import { CreateDepartamentDto } from './dto/create-departament.dto';
 import { UpdateDepartamentDto } from './dto/update-departament.dto';
 import { Response } from 'express';
 import { responseError } from 'src/common/helpers/out.helper';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { GetDepartamentsDto } from './dto/get-departament.dto';
 
 @Controller('departaments')
 export class DepartamentsController {
@@ -15,6 +17,12 @@ export class DepartamentsController {
 	}
 
 	@Get()
+	@ApiOperation({summary: 'Api para la obtencion de deparatamentos con sus regioneso ciudades'})
+	@ApiResponse({
+		description: 'Salida en caso de obtener exitosamente todos los los departamentos',
+		status: 200,
+		type: GetDepartamentsDto
+	})
 	async findAll(@Res() res: Response) {
 		try {
 			const departaments = await this.departamentsService.findAll();

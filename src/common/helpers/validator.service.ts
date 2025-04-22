@@ -15,4 +15,30 @@ export class Validator {
             throw new HttpException('El nombre ingresado es invalido',this.BAD_REQUEST)
         }
     }
+
+    paramNotFound(param: string){
+        return `El parametro (${param}) no se encontro`;
+    }
+    invalidParam(param: string){
+        return `El parametro (${param}) es invalido`;
+    }
+    validateInt(number: string,name: string){
+        if (number == null){
+            throw new HttpException(this.paramNotFound(name),this.BAD_REQUEST);
+        }
+        const out = parseInt(number);
+        if (isNaN(out)){
+            throw new HttpException(this.invalidParam(name),this.BAD_REQUEST);
+        }
+        return out;
+    }
+
+    validateString(string: string,name: string){
+        if (string==null){
+            throw new HttpException(this.paramNotFound(name),this.BAD_REQUEST);
+        }
+        if (string.trim().length == 0){
+            throw new HttpException(this.invalidParam(name),this.BAD_REQUEST);
+        }
+    }
 }

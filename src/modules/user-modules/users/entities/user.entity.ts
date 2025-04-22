@@ -16,9 +16,15 @@ export class User {
     @Column({name: 'password'})
     password: string
 
+    @Column({name: 'age'})
+    age: number
+
     @ManyToOne(() => Rol,(rol) => rol.users)
     @JoinColumn({name: 'id_rol'})
     rol: Rol
+
+    @Column({name: 'strikes'})
+    strikes: number
 
     @Column({name: 'is_deleted'})
     isDeleted: boolean

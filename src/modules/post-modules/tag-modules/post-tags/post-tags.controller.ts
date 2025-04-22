@@ -9,7 +9,7 @@ export class PostTagsController {
 
   @Post()
   create(@Body() createPostTagDto: CreatePostTagDto) {
-    return this.postTagsService.create(createPostTagDto);
+    return this.postTagsService.create(createPostTagDto,[]);
   }
 
   @Get()

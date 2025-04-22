@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CitiesService } from './cities.service';
+import { CitiesService } from './services/cities.service';
 import { CitiesController } from './cities.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { City } from './entities/city.entity';
@@ -10,5 +10,6 @@ import { City } from './entities/city.entity';
 	],
 	controllers: [CitiesController],
 	providers: [CitiesService],
+	exports: [CitiesService]
 })
 export class CitiesModule { }

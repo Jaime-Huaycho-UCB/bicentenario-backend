@@ -1,5 +1,6 @@
+import { City } from "src/modules/location-modules/cities/entities/city.entity";
 import { Post } from "src/modules/post-modules/posts/entities/post.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity('events')
 export class Event {
@@ -17,6 +18,10 @@ export class Event {
 
     @CreateDateColumn({name: 'created_at'})
     createdAt: Timestamp
+
+    @ManyToOne(() => City,(city) => city.events)
+    @JoinColumn({name: 'id_city'})
+    city: City
 
     @OneToMany(() => Post,(post) => post.event)
     posts: Post[]

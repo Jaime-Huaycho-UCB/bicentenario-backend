@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDepartamentDto } from './dto/create-departament.dto';
-import { UpdateDepartamentDto } from './dto/update-departament.dto';
+import { CreateDepartamentDto } from '../dto/create-departament.dto';
+import { UpdateDepartamentDto } from '../dto/update-departament.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Departament } from './entities/departament.entity';
+import { Departament } from '../entities/departament.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -20,11 +20,11 @@ export class DepartamentsService {
 			relations: {
 				cities: true
 			},
-			where: {
-				
-			},
 			order: {
-				name: 'ASC'
+				name: 'ASC',
+				cities: {
+					name: 'ASC'
+				}
 			}
 		})
 		return departaments;

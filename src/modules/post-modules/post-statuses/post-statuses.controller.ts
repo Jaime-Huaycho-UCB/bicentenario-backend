@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PostStatusesService } from './post-statuses.service';
+import { PostStatusesService } from './services/post-statuses.service';
 import { CreatePostStatusDto } from './dto/create-post-status.dto';
 import { UpdatePostStatusDto } from './dto/update-post-status.dto';
 

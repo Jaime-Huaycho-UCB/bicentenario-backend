@@ -9,16 +9,13 @@ import { HistoryPostsModule } from './modules/user-modules/history-posts/history
 import { UserForldersModule } from './modules/user-modules/folder-modules/user-forlders/user-forlders.module';
 import { FolderPostsModule } from './modules/user-modules/folder-modules/folder-posts/folder-posts.module';
 import { ComplaintStatusesModule } from './modules/complaint-modules/complaint-statuses/complaint-statuses.module';
-import { CommentComplaintsModule } from './modules/complaint-modules/comment-complaints/comment-complaints.module';
-import { PostComplaintsModule } from './modules/complaint-modules/post-complaints/post-complaints.module';
 import { DepartamentsModule } from './modules/location-modules/departaments/departaments.module';
 import { CitiesModule } from './modules/location-modules/cities/cities.module';
-import { FileModule } from './modules/files/files.module';
+import { FilesModule } from './modules/files/files.module';
 import { LogsModule } from './modules/logs/logs.module';
 import { PostsModule } from './modules/post-modules/posts/posts.module';
-import { PostTypesModule } from './modules/post-modules/post-types/post-types.module';
 import { PostStatusesModule } from './modules/post-modules/post-statuses/post-statuses.module';
-import { PostTagsModule } from './modules/post-modules/post-tags/post-tags.module';
+import { PostTagsModule } from './modules/post-modules/tag-modules/post-tags/post-tags.module';
 import { PostStartsModule } from './modules/post-modules/post-starts/post-starts.module';
 import { PostInteractionsModule } from './modules/post-modules/post-interactions/post-interactions.module';
 import { CommentsModule } from './modules/post-modules/comment-modules/comments/comments.module';
@@ -34,9 +31,12 @@ import { SurveysAnsweredModule } from './modules/survey-modules/surveys-answered
 import { QuestionsModule } from './modules/survey-modules/question-modules/questions/questions.module';
 import { QuestionAnswersModule } from './modules/survey-modules/question-modules/question-answers/question-answers.module';
 import { ConfigModule } from './config/config.module';
-import { ConfigService } from './config/config.service';
+import { MyConfigService } from './config/config.service';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { StorageModule } from './micro-services/storage/storage.module';
+import { ComplaintsModule } from './modules/complaint-modules/complaints/complaints.module';
+import { ObjectsComplaintsModule } from './modules/complaint-modules/objects-complaints/objects-complaints.module';
 @Module({
   imports: [
     ConfigModule,
@@ -50,14 +50,13 @@ import { AuthModule } from './modules/auth/auth.module';
     UserForldersModule,
     FolderPostsModule,
     ComplaintStatusesModule,
-    CommentComplaintsModule,
-    PostComplaintsModule,
+    ComplaintsModule,
+    ObjectsComplaintsModule,
     DepartamentsModule,
     CitiesModule,
-    FileModule,
+    FilesModule,
     LogsModule,
     PostsModule,
-    PostTypesModule,
     PostStatusesModule,
     PostTagsModule,
     PostStartsModule,
@@ -73,13 +72,14 @@ import { AuthModule } from './modules/auth/auth.module';
     SurveysModule,
     SurveysAnsweredModule,
     QuestionsModule,
-    QuestionAnswersModule
+    QuestionAnswersModule,
+    StorageModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements OnModuleInit{
-  constructor(private readonly config: ConfigService) {}
+  constructor(private readonly config: MyConfigService) {}
   onModuleInit() {
     console.log('✅ PORT:', this.config.get('PORT'));
   console.log('✅ LOGS:', this.config.get('LOGS'));
