@@ -48,6 +48,12 @@ export class UsersValidator extends Validator{
         }
     }
 
+    validateAge(age: number){
+        if (isNaN(age)){
+            throw new HttpException('El paramaetro (age) no se encontro',this.BAD_REQUEST);
+        }
+    }
+
     validateInEditUser(data: DtoInEditUser){
         this.validateId(data.id);
         if (data.email!=null){
@@ -70,5 +76,7 @@ export class UsersValidator extends Validator{
     validateInRegisterUser(data: DtoInRegisterUser){
         this.validateName(data.name);
         this.validateEmail(data.email);
+        this.validatePassword(data.password!);
+        this.validateAge(data.age);
     }
 }
