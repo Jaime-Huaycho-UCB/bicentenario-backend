@@ -1,0 +1,1 @@
+insert into objects_complaint (name) values ('Testimonio'),('Comenntario');
