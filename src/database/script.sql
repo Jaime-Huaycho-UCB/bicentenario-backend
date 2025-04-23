@@ -227,7 +227,7 @@ create table user_downloads (
 -- subFin - Para el registro de descargar de usuario
 
 -- subInicio - Para el historia del usuario
-create table history_posts (
+create table user_histories (
     id_history bigserial,
     id_user bigint not null,
     id_post bigint not null,
@@ -251,7 +251,7 @@ create table folder_posts (
 );
 -- subfin - Para colecciones de usuario
 
-create table post_starts (
+create table post_stars (
     id_start bigserial,
     id_post bigint not null,
     id_user bigint not null,
