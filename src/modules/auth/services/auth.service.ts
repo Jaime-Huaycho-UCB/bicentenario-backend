@@ -60,7 +60,8 @@ export class AuthService {
         } catch (error) {
             user = await this.userAuthService.registerUser({
                 email: payload!.email!,
-                name: payload!.name!
+                name: payload!.name!,
+                age: 20
             });
         }
         const payloadOut = {
@@ -76,7 +77,8 @@ export class AuthService {
         const payload = await this.getPayload(idToken);
         let user = await this.userAuthService.registerUser({
             email: payload!.email!,
-            name: payload!.name!
+            name: payload!.name!,
+            age: 20
         });
         const payloadOut = {
             idUser: user.id,

@@ -23,7 +23,8 @@ export class DtoInRegisterUser {
     @ApiProperty({description: 'Contrasena del usuarioa resistrar',type: String,nullable: false})
     password?: string
 
-    age?: number
+    @ApiProperty({description: "Edad del usuario",type: Number,nullable: false})
+    age: number
 }
 
 export class DtoInChangePassword {

@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { number } from "joi";
 // import { DtoRol } from "./rol.dto";
 
 export class DtoUserName {
@@ -18,6 +19,9 @@ export class DtoUser {
 
     @ApiProperty({description: 'Contrasena del usuario',type: String,nullable: false})
     password: string
+
+    @ApiProperty({description: "Edad del usuario",type: number,nullable: false})
+    age: number
 
     // @ApiProperty({description: 'Tipo de usuario',type: DtoRol,nullable: false})
     // rol: DtoRol
