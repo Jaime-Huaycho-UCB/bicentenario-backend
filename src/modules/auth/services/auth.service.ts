@@ -33,7 +33,11 @@ export class AuthService {
             rol: user!.rol
         };
         const token = await this.jwtService.signAsync(payload);
-        return token;
+        return {
+            token: token,
+            idUser: user!.id,
+            rol: user!.rol
+        };
     }
 
     async restorePassword(email: string) {
