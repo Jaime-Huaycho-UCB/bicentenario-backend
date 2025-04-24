@@ -9,7 +9,7 @@ export class DtoOutLogin extends DtoResponse{
     @ApiProperty({description: 'Token del usuario para la sesion',type: String,nullable: false})
     token: string
 
-    @ApiProperty({description: 'Id del usuario',type: number,nullable: false})
+    @ApiProperty({description: 'Id del usuario',type: Number,nullable: false})
     idUser: number
 
     @ApiProperty({description: 'Rol del usuario',type: RolDto,nullable: false})
