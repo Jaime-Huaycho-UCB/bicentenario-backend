@@ -3,12 +3,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation, ApiHeader, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { headerAuth } from 'src/modules/auth/auth.util';
 import { AuthGuard } from 'src/modules/auth/services/auth.guard';
-import { swaggerRes500, DtoResponse } from 'src/common/helpers/classes.dto';
+import { swaggerRes500, DtoResponse, swaggerRes404 } from 'src/common/helpers/classes.dto';
 import { responseError } from 'src/common/helpers/out.helper';
 import { DtoOutEditUser, DtoInEditUser } from './dto/edit-user';
 import { UsersService } from './services/users.service';
 import { Response } from 'express';
-import { DtoOutGetUsers } from './dto/get-user.dto';
+import { DtoOutGetUsers, GetOneUserDto } from './dto/get-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -94,14 +94,20 @@ export class UsersController {
 	}
 
 	@Get(':id')
-	@ApiOperation({description: 'Api par obtener a un usurio'})
+	@ApiOperation({summary: 'Api par obtener a un usurio'})
 	@ApiParam({ name: 'id', required: true, description: 'Id del usuario a obtener' })
+	@ApiResponse({
+		description: 'Salida en caso de obtener exitosamente al usuario',
+		status: 200,
+		type: GetOneUserDto
+	})
+	@ApiResponse(swaggerRes404())
 	async findOne(@Param('id') id: string,@Res() res: Response){
 		try {
-			const result = await this.usersService.getAUserById(parseInt(id));
+			const user = await this.usersService.getAUserById(parseInt(id));
 			return res.status(200).json({
 				code: 200,
-				message: 'El usuario se elimino exitosamente'
+				user: user
 			});
 		} catch (error) {
 			return responseError(error, res);
