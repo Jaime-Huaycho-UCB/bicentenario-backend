@@ -1,6 +1,7 @@
 import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, Timestamp, Entity, OneToMany } from "typeorm"
 import { Rol } from "../../rols/entities/rol.entity"
 import { Post } from "src/modules/post-modules/posts/entities/post.entity"
+import { Comment } from "src/modules/post-modules/comment-modules/comments/entities/comment.entity"
 
 @Entity('users')
 export class User {
@@ -38,8 +39,8 @@ export class User {
     @OneToMany(() => Post,(post) => post.user)
     posts: Post[]
 
-    // @OneToMany(() => CommentEntity,(comment) => comment.user)
-    // comments: CommentEntity[]
+    @OneToMany(() => Comment,(comment) => comment.user)
+    comments: Comment[]
 
     @OneToMany(() => Post,(post) => post.user)
     approvals: Post[]

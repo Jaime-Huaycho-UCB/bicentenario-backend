@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Complaint } from "../../complaints/entities/complaint.entity";
 
 @Entity('complaint_statuses')
 export class ComplaintStatus {
@@ -10,4 +11,7 @@ export class ComplaintStatus {
 
     @Column({name: 'description'})
     description: string
+
+    @OneToMany(() => Complaint,(complaint) => complaint.status)
+    complaints: Complaint[]
 }

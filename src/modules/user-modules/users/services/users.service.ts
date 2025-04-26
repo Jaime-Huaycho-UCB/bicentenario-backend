@@ -42,11 +42,19 @@ export class UsersService {
 				isDeleted: false,
 				id: id
 			},
-			...(showPass ? {
-				select: ['id', 'name', 'email', 'password', 'rol']
-			} : {
-				select: ['id', 'name', 'email', 'rol']
-			})
+			relations: {
+				rol: true
+			},
+			select: {
+				id: true,
+				name: true,
+				email: true,
+				password: showPass,
+				rol: true,
+				age: true,
+				strikes: true,
+				createdAt: true
+			}
 		})
 
 		this.usersValidator.validateUser(user);

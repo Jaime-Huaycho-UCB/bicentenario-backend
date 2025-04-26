@@ -211,21 +211,21 @@ export class PostsService {
 		this.postsValidator.validatePost(post);
 		return post;
 	}
-	async findOneAll(id: number){
+	async findOneAll(id: number,{user = false,city = false,file = false,tags = false,status = false, event= false,curator = false} = {}){
 		const post = await this.postRepository.findOne({
 			where: {
 				id: id
 			},
 			relations: {
-				user: true,
+				user: user,
 				city: {
-					departament: true
+					departament: city
 				},
-				file: true,
-				tags: true,
-				status: true,
-				event: true,
-				curator: true,
+				file: file,
+				tags: tags,
+				status: status,
+				event: event,
+				curator: curator,
 				
 			},
 		});

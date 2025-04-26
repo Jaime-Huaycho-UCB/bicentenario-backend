@@ -1,26 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateComplaintStatusDto } from './dto/create-complaint-status.dto';
 import { UpdateComplaintStatusDto } from './dto/update-complaint-status.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ComplaintStatus } from './entities/complaint-status.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ComplaintStatusesService {
-  create(createComplaintStatusDto: CreateComplaintStatusDto) {
-    return 'This action adds a new complaintStatus';
-  }
+	constructor(
+		@InjectRepository(ComplaintStatus)
+		private readonly complaintStatusRepository: Repository<ComplaintStatus>
+	) { }
 
-  findAll() {
-    return `This action returns all complaintStatuses`;
-  }
+	create(createComplaintStatusDto: CreateComplaintStatusDto) {
+		return 'This action adds a new complaintStatus';
+	}
 
-  findOne(id: number) {
-    return `This action returns a #${id} complaintStatus`;
-  }
+	findAll() {
+		return `This action returns all complaintStatuses`;
+	}
 
-  update(id: number, updateComplaintStatusDto: UpdateComplaintStatusDto) {
-    return `This action updates a #${id} complaintStatus`;
-  }
+	async findOne(id: number) {
+		const status = await this.complaintStatusRepository.findOne({
+			where: {
+				id: id
+			}
+		});
+		if (!status){
+			throw new HttpException('Ho se encontro del estado',404);
+		}
+		return status;
+	}
 
-  remove(id: number) {
-    return `This action removes a #${id} complaintStatus`;
-  }
+	update(id: number, updateComplaintStatusDto: UpdateComplaintStatusDto) {
+		return `This action updates a #${id} complaintStatus`;
+	}
+
+	remove(id: number) {
+		return `This action removes a #${id} complaintStatus`;
+	}
 }

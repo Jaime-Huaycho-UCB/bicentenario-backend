@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { CreateObjectsComplaintDto } from './dto/create-objects-complaint.dto';
 import { UpdateObjectsComplaintDto } from './dto/update-objects-complaint.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectsComplaint } from './entities/objects-complaint.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ObjectsComplaintsService {
-  create(createObjectsComplaintDto: CreateObjectsComplaintDto) {
-    return 'This action adds a new objectsComplaint';
-  }
+	constructor(
+		@InjectRepository(ObjectsComplaint)
+		private readonly objectsComplaintRepository: Repository<ObjectsComplaint>
+	) { }
 
-  findAll() {
-    return `This action returns all objectsComplaints`;
-  }
+	create(createObjectsComplaintDto: CreateObjectsComplaintDto) {
+		return 'This action adds a new objectsComplaint';
+	}
 
-  findOne(id: number) {
-    return `This action returns a #${id} objectsComplaint`;
-  }
+	findAll() {
+		return `This action returns all objectsComplaints`;
+	}
 
-  update(id: number, updateObjectsComplaintDto: UpdateObjectsComplaintDto) {
-    return `This action updates a #${id} objectsComplaint`;
-  }
+	async findOne(id: number) {
+		const objectType = await this.objectsComplaintRepository.findOne({
+			where: {
+				id: id
+			}
+		});
+		return objectType;
+	}
 
-  remove(id: number) {
-    return `This action removes a #${id} objectsComplaint`;
-  }
+	update(id: number, updateObjectsComplaintDto: UpdateObjectsComplaintDto) {
+		return `This action updates a #${id} objectsComplaint`;
+	}
+
+	remove(id: number) {
+		return `This action removes a #${id} objectsComplaint`;
+	}
 }

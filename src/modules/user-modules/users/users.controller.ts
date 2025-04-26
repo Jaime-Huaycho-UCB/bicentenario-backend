@@ -92,4 +92,19 @@ export class UsersController {
 			return responseError(error, res);
 		}
 	}
+
+	@Get(':id')
+	@ApiOperation({description: 'Api par obtener a un usurio'})
+	@ApiParam({ name: 'id', required: true, description: 'Id del usuario a obtener' })
+	async findOne(@Param('id') id: string,@Res() res: Response){
+		try {
+			const result = await this.usersService.getAUserById(parseInt(id));
+			return res.status(200).json({
+				code: 200,
+				message: 'El usuario se elimino exitosamente'
+			});
+		} catch (error) {
+			return responseError(error, res);
+		}
+	}
 }

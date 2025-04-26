@@ -68,7 +68,7 @@ export const getPostComplaintTemplate = (post, complaint) => {
                 <p>Estimado <strong>${post.user.name}</strong>,</p>
                 <p>Se ha recibido una denuncia sobre tu publicación:</p>
                 <div class="report-container">
-                    <p><strong>Título:</strong> ${post.name}</p>
+                    <p><strong>Título:</strong> ${post.title}</p>
                     <p><strong>Motivo de la denuncia:</strong> ${complaint.title}</p>
                     <p><strong>Detalles:</strong> ${complaint.report}</p>
                 </div>

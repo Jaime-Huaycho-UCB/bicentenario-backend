@@ -6,6 +6,7 @@ import { PostStatus } from "../../post-statuses/entities/post-status.entity";
 import { Event } from "../../event-modules/events/entities/event.entity";
 import { PostTag } from "../../tag-modules/post-tags/entities/post-tag.entity";
 import { Tag } from "../../tag-modules/tags/entities/tag.entity";
+import { Comment } from "../../comment-modules/comments/entities/comment.entity";
 
 @Entity('posts')
 export class Post {
@@ -88,4 +89,7 @@ export class Post {
         inverseJoinColumn: { name: 'id_tag', referencedColumnName: 'id' }
     })
     tags: Tag[];
+
+    @OneToMany(() => Comment,(comment) => comment.post)
+    comments: Comment[]
 }

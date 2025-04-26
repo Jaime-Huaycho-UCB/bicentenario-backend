@@ -16,7 +16,7 @@ import { headerAuth } from 'src/modules/auth/auth.util';
 export class PostsController {
 	constructor(private readonly postsService: PostsService) { }
 
-	@UseGuards(AuthGuard)
+	// @UseGuards(AuthGuard)
 	@Post()
 	@ApiOperation({summary: 'Api para crear testimonios'})
 	@ApiHeader(headerAuth())
@@ -44,7 +44,7 @@ export class PostsController {
         }
 	}
 
-	@UseGuards(AuthGuard)
+	// @UseGuards(AuthGuard)
 	@Get()
 	@ApiOperation({summary: 'Api para obtener testimonios'})
 	@ApiHeader(headerAuth())
