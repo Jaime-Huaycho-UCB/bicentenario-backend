@@ -12,8 +12,16 @@ export class TagsController {
 	constructor(private readonly tagsService: TagsService) { }
 
 	@Post()
-	create(@Body() createTagDto: CreateTagDto) {
-		return this.tagsService.create(createTagDto);
+	async create(@Body() data: CreateTagDto,@Res() res: Response) {
+		try {
+			const tagSaved = await this.tagsService.create(data);
+			return res.status(200).json({
+				code: 200,
+				tagSaved: tagSaved
+			})
+		} catch (error) {
+			return responseError(error,res);
+		}
 	}
 
 	@Get()
@@ -36,8 +44,16 @@ export class TagsController {
 	}
 
 	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.tagsService.findOne(+id);
+	async findOne(@Param('id') id: string,@Res() res: Response) {
+		try {
+			const tag = await this.tagsService.findOne(parseInt(id));
+			return res.status(200).json({
+				code: 200,
+				tag: tag
+			})
+		} catch (error) {
+			return responseError(error,res);
+		}
 	}
 
 	@Patch(':id')

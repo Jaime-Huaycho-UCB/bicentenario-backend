@@ -4,7 +4,7 @@ import { PostTag } from "../../post-tags/entities/post-tag.entity";
 @Entity('tags')
 export class Tag {
     @PrimaryGeneratedColumn({name: 'id_tag'})
-    id: string
+    id: number
 
     @Column({name: 'name'})
     name: string

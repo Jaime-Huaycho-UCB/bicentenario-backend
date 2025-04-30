@@ -12,8 +12,11 @@ export class TagsService {
 		private readonly tagRespository: Repository<Tag>
 	){}
 
-	create(createTagDto: CreateTagDto) {
-		return 'This action adds a new tag';
+	async create(data: CreateTagDto) {
+		const tag = new Tag();
+		tag.name = data.name;
+		const tagSaved = await this.tagRespository.save(tag);
+		return tagSaved;
 	}
 
 	async findAll() {
@@ -25,8 +28,13 @@ export class TagsService {
 		return tags;
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} tag`;
+	async findOne(id: number) {
+		const tag = await this.tagRespository.findOne({
+			where: {
+				id: id
+			}
+		})
+		return tag;
 	}
 
 	update(id: number, updateTagDto: UpdateTagDto) {
