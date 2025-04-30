@@ -39,7 +39,7 @@ export class AuthController {
             return res.status(200).json({
                 code: 200,
                 message: 'Inicio de sesion exitoso',
-                token: token
+                ...token
             });
         } catch (error) {
             return responseError(error,res);

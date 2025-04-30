@@ -90,7 +90,6 @@ export class PostsController {
 				...postsAndData
 			})
 		} catch (error) {
-			console.log(error);
 			return responseError(error,res);
 		};
 	}
