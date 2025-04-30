@@ -55,6 +55,7 @@ export class PostsController {
 	@ApiQuery({description: 'Ids de etiquetas relacionadas al testimonio para filtro',name: 'tags',required: false,type: String,example: '1,2,3'})
 	@ApiQuery({description: 'Numero de pagina a ver',name: 'page',required: false,type: String,example: '1'})
 	@ApiQuery({description: 'Limite de testimonios por pagina',name: 'limit',required: false,type: String,example: '10'})
+	@ApiQuery({description: 'Tipo de testimonio',name: 'type',required: false,type: String,example: '1'})
 	@ApiResponse({
 		description: 'Respuesta en caso de obtener exitosamente los testimonios',
 		status: 200,
@@ -70,6 +71,7 @@ export class PostsController {
 		@Query('tags') tags,
 		@Query('page') page,
 		@Query('limit') limit,
+		@Query('type') type,
 		@Res() res: Response
 	) {
 		try {
@@ -80,7 +82,8 @@ export class PostsController {
 				search: (search === undefined) ? null : (search.trim() == '' ? null : search.trim()),
 				tags: (tags === undefined) ? null : (search == '' ? null : tags),
 				page: parseInt(page),
-				limit: parseInt(limit)
+				limit: parseInt(limit),
+				type: parseInt(type)
 			});
 			return res.status(200).json({
 				code: 200,

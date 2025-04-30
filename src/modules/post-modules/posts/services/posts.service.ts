@@ -121,6 +121,9 @@ export class PostsService {
 		if (!isNaN(filters.idEvent)) {
 			query.andWhere('event.id = :idEvent', { idEvent: filters.idEvent });
 		}
+		if (!isNaN(filters.type)){
+			query.andWhere('post.type = :type',{type: filters.type})
+		}
 		if (tags.length > 0) {
 			query
 				.innerJoin('post.tags', 'filterTags')
