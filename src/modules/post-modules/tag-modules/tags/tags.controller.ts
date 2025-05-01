@@ -32,7 +32,7 @@ export class TagsController {
 		status: 200,
 		type: GetTagsDto
 	})
-	@ApiOperation(swaggerRes404())
+	@ApiResponse(swaggerRes404())
 	async findAll(@Res() res: Response) {
 		try {
 			const tags = await this.tagsService.findAll();

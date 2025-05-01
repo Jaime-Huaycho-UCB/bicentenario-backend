@@ -16,12 +16,12 @@ export class Event {
     @Column({name: 'content'})
     content: string
 
-    @CreateDateColumn({name: 'created_at'})
-    createdAt: Timestamp
-
     @ManyToOne(() => City,(city) => city.events)
     @JoinColumn({name: 'id_city'})
     city: City
+
+    @CreateDateColumn({name: 'created_at'})
+    createdAt: Timestamp
 
     @OneToMany(() => Post,(post) => post.event)
     posts: Post[]
