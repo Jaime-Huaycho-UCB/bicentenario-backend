@@ -3,7 +3,7 @@ import { CreateCommentDto } from '../dto/create-comment.dto';
 import { UpdateCommentDto } from '../dto/update-comment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from '../entities/comment.entity';
-import { IsNull, Not, Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { UsersService } from 'src/modules/user-modules/users/services/users.service';
 import { PostsService } from 'src/modules/post-modules/posts/services/posts.service';
 import { CommentsValidator } from './comments.validator';
@@ -58,7 +58,7 @@ export class CommentsService {
 					}
 				} : {}),
 				...(isComment ? {}:{
-					head: 
+					head: IsNull()
 				})
 			},
 			relations: {
