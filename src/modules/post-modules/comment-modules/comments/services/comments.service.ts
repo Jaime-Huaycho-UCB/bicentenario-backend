@@ -3,7 +3,7 @@ import { CreateCommentDto } from '../dto/create-comment.dto';
 import { UpdateCommentDto } from '../dto/update-comment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from '../entities/comment.entity';
-import { IsNull, Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { UsersService } from 'src/modules/user-modules/users/services/users.service';
 import { PostsService } from 'src/modules/post-modules/posts/services/posts.service';
 import { CommentsValidator } from './comments.validator';
@@ -48,7 +48,7 @@ export class CommentsService {
 			dislikes: string,
 			created_at: string,
 		}
-	} = {},isComment = true) {
+	} = {}) {
 		const comments = await this.commentRepository.find({
 			where: {
 				isDeleted: false,
@@ -57,9 +57,7 @@ export class CommentsService {
 						id: filters.idPost
 					}
 				} : {}),
-				...(isComment ? {}:{
-					head: IsNull()
-				})
+				head: IsNull()
 			},
 			relations: {
 				user: true

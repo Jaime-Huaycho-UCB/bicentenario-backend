@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { EventForumMessagesService } from './event-forum_messages.service';
 import { CreateEventForumMessageDto } from './dto/create-event-forum_message.dto';
 import { UpdateEventForumMessageDto } from './dto/update-event-forum_message.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('event-forum-messages')
 export class EventForumMessagesController {
   constructor(private readonly eventForumMessagesService: EventForumMessagesService) {}

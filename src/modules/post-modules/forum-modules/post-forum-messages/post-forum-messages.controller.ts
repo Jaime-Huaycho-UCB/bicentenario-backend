@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PostForumMessagesService } from './post-forum-messages.service';
 import { CreatePostForumMessageDto } from './dto/create-post-forum-message.dto';
 import { UpdatePostForumMessageDto } from './dto/update-post-forum-message.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('post-forum-messages')
 export class PostForumMessagesController {
   constructor(private readonly postForumMessagesService: PostForumMessagesService) {}

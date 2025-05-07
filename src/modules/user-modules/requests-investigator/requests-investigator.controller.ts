@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RequestsInvestigatorService } from './requests-investigator.service';
 import { CreateRequestsInvestigatorDto } from './dto/create-requests-investigator.dto';
 import { UpdateRequestsInvestigatorDto } from './dto/update-requests-investigator.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('requests-investigator')
 export class RequestsInvestigatorController {
   constructor(private readonly requestsInvestigatorService: RequestsInvestigatorService) {}

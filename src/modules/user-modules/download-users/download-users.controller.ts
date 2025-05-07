@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { DownloadUsersService } from './download-users.service';
 import { CreateDownloadUserDto } from './dto/create-download-user.dto';
 import { UpdateDownloadUserDto } from './dto/update-download-user.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('download-users')
 export class DownloadUsersController {
   constructor(private readonly downloadUsersService: DownloadUsersService) {}

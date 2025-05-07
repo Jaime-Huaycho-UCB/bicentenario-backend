@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { HistoryPostsService } from './history-posts.service';
 import { CreateHistoryPostDto } from './dto/create-history-post.dto';
 import { UpdateHistoryPostDto } from './dto/update-history-post.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('history-posts')
 export class HistoryPostsController {
   constructor(private readonly historyPostsService: HistoryPostsService) {}

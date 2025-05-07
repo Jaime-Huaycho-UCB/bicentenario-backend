@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ComplaintStatusesService } from './complaint-statuses.service';
 import { CreateComplaintStatusDto } from './dto/create-complaint-status.dto';
 import { UpdateComplaintStatusDto } from './dto/update-complaint-status.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('complaint-statuses')
 export class ComplaintStatusesController {
   constructor(private readonly complaintStatusesService: ComplaintStatusesService) {}

@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CommentInteractionsService } from './comment-interactions.service';
 import { CreateCommentInteractionDto } from './dto/create-comment-interaction.dto';
 import { UpdateCommentInteractionDto } from './dto/update-comment-interaction.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('comment-interactions')
 export class CommentInteractionsController {
   constructor(private readonly commentInteractionsService: CommentInteractionsService) {}

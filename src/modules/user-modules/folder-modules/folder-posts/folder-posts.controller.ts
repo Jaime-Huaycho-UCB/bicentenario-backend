@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { FolderPostsService } from './folder-posts.service';
 import { CreateFolderPostDto } from './dto/create-folder-post.dto';
 import { UpdateFolderPostDto } from './dto/update-folder-post.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('folder-posts')
 export class FolderPostsController {
   constructor(private readonly folderPostsService: FolderPostsService) {}

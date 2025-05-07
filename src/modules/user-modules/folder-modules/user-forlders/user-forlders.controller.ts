@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserForldersService } from './user-forlders.service';
 import { CreateUserForlderDto } from './dto/create-user-forlder.dto';
 import { UpdateUserForlderDto } from './dto/update-user-forlder.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('user-forlders')
 export class UserForldersController {
   constructor(private readonly userForldersService: UserForldersService) {}

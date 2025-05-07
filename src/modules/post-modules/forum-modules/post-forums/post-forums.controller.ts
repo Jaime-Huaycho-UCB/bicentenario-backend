@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PostForumsService } from './post-forums.service';
 import { CreatePostForumDto } from './dto/create-post-forum.dto';
 import { UpdatePostForumDto } from './dto/update-post-forum.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('post-forums')
 export class PostForumsController {
   constructor(private readonly postForumsService: PostForumsService) {}

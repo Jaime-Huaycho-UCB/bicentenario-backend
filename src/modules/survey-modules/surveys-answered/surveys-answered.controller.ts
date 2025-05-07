@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SurveysAnsweredService } from './surveys-answered.service';
 import { CreateSurveysAnsweredDto } from './dto/create-surveys-answered.dto';
 import { UpdateSurveysAnsweredDto } from './dto/update-surveys-answered.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('surveys-answered')
 export class SurveysAnsweredController {
   constructor(private readonly surveysAnsweredService: SurveysAnsweredService) {}
