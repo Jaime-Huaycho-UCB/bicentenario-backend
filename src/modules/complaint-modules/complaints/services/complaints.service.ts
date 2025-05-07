@@ -8,7 +8,7 @@ import { ComplaintStatusesService } from '../../complaint-statuses/complaint-sta
 import { ObjectsComplaintsService } from '../../objects-complaints/objects-complaints.service';
 import { EmailService } from 'src/micro-services/email/email.service';
 import { PostsService } from 'src/modules/post-modules/posts/services/posts.service';
-import { CommentsService } from 'src/modules/post-modules/comment-modules/comments/comments.service';
+import { CommentsService } from 'src/modules/post-modules/comment-modules/comments/services/comments.service';
 import { getPostComplaintTemplate } from '../templates/post-complaint.template';
 import { getComplaintCommentTemplate } from '../templates/comment-complaint.template';
 
@@ -103,7 +103,9 @@ export class ComplaintsService {
 		if (idObjectType == 1){
 			object = await this.postsService.findOneAll(idObject,{user: true});
 		}else if (idObjectType == 2){
-			object = await this.commentsService.findOne(idObject);
+			object = await this.commentsService.findOne(idObject,{
+				user: true
+			});
 		}
 		return object;
 	}
