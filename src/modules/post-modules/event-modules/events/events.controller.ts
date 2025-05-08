@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Res, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Res, Put, Query } from '@nestjs/common';
 import { EventsService } from './services/events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -41,12 +41,19 @@ export class EventsController {
 		type: GetEventsDto
 	})
 	@ApiResponse(swaggerRes404())
-	async findAll(@Res() res: Response) {
+	async findAll(
+		@Query('page') page: string,
+		@Query('limit') limit: string,
+		@Res() res: Response
+	) {
 		try {
-			const events = await this.eventsService.findAll();
+			const response = await this.eventsService.findAll({
+				page: parseInt(page),
+				limit: parseInt(limit)
+			});
 			return res.status(200).json({
 				code: 200,
-				events: events
+				...response
 			})
 		} catch (error) {
 			return responseError(error,res);

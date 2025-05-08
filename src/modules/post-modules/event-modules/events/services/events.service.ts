@@ -29,8 +29,14 @@ export class EventsService {
 		return 'Se creo el evento exitosamente';
 	}
 
-	async findAll() {
-		const events = await this.eventRepository.find({
+	async findAll(filters: {
+		page?: number,
+		limit?: number
+	} = {}) {
+		const page = isNaN(Number(filters.page)) ? 1 : Number(filters.page);
+		const limit = isNaN(Number(filters.limit)) ? 10 : Number(filters.limit);
+		const skip = (page - 1) * limit;
+		const [events,total] = await this.eventRepository.findAndCount({
 			relations: {
 				city: {
 					departament: true
@@ -38,10 +44,18 @@ export class EventsService {
 			},
 			order: {
 				createdAt: 'DESC'
-			}
+			},
+			skip: skip,
+			take: limit
 		})
 		this.eventsValidator.validateEvents(events);
-		return events;
+		return {
+			events: events,
+			total: total,
+			page: page,
+			limit: limit,
+			pages: Math.ceil(total / limit)
+		};
 	}
 
 	async findOne(id: number,filters = {
