@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Query, UseGuards } from '@nestjs/common';
 import { CommentsService } from './services/comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Response } from 'express';
 import { responseError } from 'src/common/helpers/out.helper';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from 'src/modules/auth/services/auth.guard';
+import { GetCommentsDto } from './dto/get-comments.dto';
 
 @Controller('comments')
 export class CommentsController {
@@ -22,8 +25,15 @@ export class CommentsController {
 		}
 	}
 
+	// @UseGuards(AuthGuard)
 	@Get()
-	async findAll(
+	@ApiOperation({summary: 'Api para obtener todo los comentarios de un testimonio'})
+	@ApiResponse({
+		description: 'Salida en caso de obtener los comentarios exitosamente',
+		status: 200,
+		type: GetCommentsDto
+	})
+	async findAllComments(
 		@Query('idPost') idPost: string,
 		@Query('orderByCreatedAt') createdAt: string,
 		@Query('orderByLikes') likes: string,
@@ -31,7 +41,7 @@ export class CommentsController {
 		@Res() res: Response
 	) {
 		try {
-			const comments = await this.commentsService.findAll({
+			const comments = await this.commentsService.findAllComments({
 				idPost: parseInt(idPost),
 				order: {
 					created_at: (createdAt ? createdAt : ''),
@@ -44,7 +54,27 @@ export class CommentsController {
 				comments: comments
 			});
 		} catch (error) {
-			
+			return responseError(error,res);
+		}
+	}
+
+	// @UseGuards(AuthGuard)
+	@Get('/respones')
+	@ApiOperation({summary: 'Api para obtener todo respuestas a un comentario'})
+	async findAllResponses(
+		@Query('idComment') idComment: string,
+		@Res() res: Response
+	) {
+		try {
+			const responses = await this.commentsService.findAllResponses({
+				idComment: parseInt(idComment),
+			});
+			return res.status(200).json({
+				code: 200,
+				responses: responses
+			});
+		} catch (error) {
+			return responseError(error,res);
 		}
 	}
 

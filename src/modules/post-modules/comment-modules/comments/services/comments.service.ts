@@ -41,7 +41,7 @@ export class CommentsService {
 		return await this.findOne(responseSaved.id);
 	}
 
-	async findAll(filters: {
+	async findAllComments(filters: {
 		idPost?: number,
 		order?: {
 			likes: string,
@@ -85,6 +85,33 @@ export class CommentsService {
 		});
 		this.commentsValidator.validateComments(comments);
 		return comments;
+	}
+
+	async findAllResponses(filters: {
+		idComment?: number,
+	} = {}) {
+		const responses = await this.commentRepository.find({
+			where: {
+				isDeleted: false,
+				...(filters.idComment !== undefined && !isNaN(Number(filters.idComment)) ? {
+					head: filters.idComment
+				} : {}),
+			},
+			relations: {
+				user: true
+			},
+			select: {
+				user: {
+					id: true,
+					name: true,
+				}
+			},
+			order: {
+				createdAt: 'DESC'
+			}
+		});
+		this.commentsValidator.validateComments(responses);
+		return responses;
 	}
 
 	async findOne(id: number, relations = {
