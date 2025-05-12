@@ -7,7 +7,7 @@ import { IsNull, Not, Repository } from 'typeorm';
 import { UsersService } from 'src/modules/user-modules/users/services/users.service';
 import { PostsService } from 'src/modules/post-modules/posts/services/posts.service';
 import { CommentsValidator } from './comments.validator';
-import { CreateResopnseDto } from '../dto/create-response.dto';
+import { CreateResponseDto } from '../dto/create-response.dto';
 
 @Injectable()
 export class CommentsService {
@@ -20,25 +20,27 @@ export class CommentsService {
 	) { }
 
 	async createComment(data: CreateCommentDto) {
+		this.commentsValidator.validateCreateComment(data);
 		const user = await this.usersService.getAUserById(data.idUser);
 		const post = await this.postsService.findOne(`${data.idPost}`);
 		const comment = new Comment();
 		comment.post = post!;
 		comment.user = user!;
 		comment.content = data.content;
-		const commentSaved = await this.commentRepository.save(comment);
-		return await this.findOne(commentSaved.id);
+		await this.commentRepository.save(comment);
+		return 'El comentario se creo exitosamente';
 	}
 
-	async createResponse(data: CreateResopnseDto) {
+	async createResponse(data: CreateResponseDto) {
+		this.commentsValidator.validateCreateResponse(data);
 		const comment = await this.findOne(data.idComment);
 		const user = await this.usersService.getAUserById(data.idUser);
 		const response = new Comment();
 		response.head = comment!.id;
 		response.user = user!;
 		response.content = data.content;
-		const responseSaved = await this.commentRepository.save(response);
-		return await this.findOne(responseSaved.id);
+		await this.commentRepository.save(response);
+		return 'La respuesta se creo exitosamente';
 	}
 
 	async findAllComments(filters: {
@@ -66,7 +68,12 @@ export class CommentsService {
 				user: {
 					id: true,
 					name: true,
-				}
+				},
+				id: true,
+				content: true,
+				likes: true,
+				dislikes: true,
+				createdAt: true
 			},
 
 			...(filters.order ? {
@@ -104,7 +111,12 @@ export class CommentsService {
 				user: {
 					id: true,
 					name: true,
-				}
+				},
+				id: true,
+				content: true,
+				likes: true,
+				dislikes: true,
+				createdAt: true
 			},
 			order: {
 				createdAt: 'DESC'

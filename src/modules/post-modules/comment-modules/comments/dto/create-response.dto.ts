@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class CreateResopnseDto {
+export class CreateResponseDto {
 
     @ApiProperty({description: 'Id del comentario a responder'})
     idComment: number
