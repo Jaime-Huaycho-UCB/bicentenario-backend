@@ -56,6 +56,7 @@ export class PostsController {
 	@ApiQuery({description: 'Numero de pagina a ver',name: 'page',required: false,type: String,example: '1'})
 	@ApiQuery({description: 'Limite de testimonios por pagina',name: 'limit',required: false,type: String,example: '10'})
 	@ApiQuery({description: 'Tipo de testimonio',name: 'type',required: false,type: String,example: '1'})
+	@ApiQuery({description: 'Id del usuario',name: 'idUser',required: false,type: String,example: '1'})
 	@ApiResponse({
 		description: 'Respuesta en caso de obtener exitosamente los testimonios',
 		status: 200,
@@ -72,6 +73,7 @@ export class PostsController {
 		@Query('page') page,
 		@Query('limit') limit,
 		@Query('type') type,
+		@Query('idUser') idUser,
 		@Res() res: Response
 	) {
 		try {
@@ -83,7 +85,8 @@ export class PostsController {
 				tags: (tags === undefined) ? null : (search == '' ? null : tags),
 				page: parseInt(page),
 				limit: parseInt(limit),
-				type: parseInt(type)
+				type: parseInt(type),
+				idUser: parseInt(idUser)
 			});
 			return res.status(200).json({
 				code: 200,

@@ -124,6 +124,9 @@ export class PostsService {
 		if (!isNaN(filters.type)){
 			query.andWhere('post.type = :type',{type: filters.type})
 		}
+		if (!isNaN(filters.idUser)){
+			query.andWhere('user.id = :idUser',{idUser: filters.idUser})
+		}
 		if (tags.length > 0) {
 			query
 				.innerJoin('post.tags', 'filterTags')
