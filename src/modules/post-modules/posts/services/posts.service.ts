@@ -30,7 +30,7 @@ export class PostsService {
 		private readonly tagsService: TagsService
 	) { }
 
-	async create(data: CreatePostDto, file: Express.Multer.File) {
+	async create(data: CreatePostDto, file: Express.Multer.File,miniature: Express.Multer.File) {
 		this.postsValidator.validateCreatePost(data);
 		const idUser = this.postsValidator.validateIdUser(data.idUser);
 		const idCity = this.postsValidator.validateIdCity(data.idCity);
@@ -42,7 +42,12 @@ export class PostsService {
 
 		const user = await this.usersService.getAUserById(idUser);
 		const city = await this.citiesService.findOne(idCity);
+		let miniatureRegistered;
 		let fileRegistered;
+		if (miniature != null){
+			const miniatureSaved = await this.storageService.uploadFile(miniature);
+			miniatureRegistered = await this.filesService.create(miniatureSaved);
+		}
 		if (file != null) {
 			const fileSaved = await this.storageService.uploadFile(file);
 			fileRegistered = await this.filesService.create(fileSaved);
@@ -58,6 +63,9 @@ export class PostsService {
 		post.description = data.description;
 		post.city = city!;
 		post.type = type;
+		if (miniature){
+			post.miniature = miniatureRegistered;
+		}
 		if (file) {
 			post.file = fileRegistered;
 		}
@@ -104,6 +112,7 @@ export class PostsService {
 			.leftJoinAndSelect('post.city', 'city')
 			.leftJoinAndSelect('city.departament', 'departament')
 			.leftJoinAndSelect('post.file', 'file')
+			.leftJoinAndSelect('post.miniature', 'miniature')
 			.leftJoinAndSelect('post.status', 'status')
 			.leftJoinAndSelect('post.event', 'event')
 			.leftJoinAndSelect('post.tags', 'tags')
@@ -136,6 +145,7 @@ export class PostsService {
 				.addGroupBy('city.id')
 				.addGroupBy('departament.id')
 				.addGroupBy('file.id')
+				.addGroupBy('miniature.id')
 				.addGroupBy('status.id')
 				.addGroupBy('event.id')
 				.addGroupBy('tags.id')
@@ -162,6 +172,7 @@ export class PostsService {
 			'city',
 			'departament',
 			'file',
+			'miniature',
 			'tags'
 		]);
 		const [posts, total] = await query.getManyAndCount();

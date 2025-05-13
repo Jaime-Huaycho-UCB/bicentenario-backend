@@ -42,6 +42,10 @@ export class Post {
     @Column({name: 'type'})
     type: number
 
+    @OneToOne(() => File,(miniature) => miniature.post)
+    @JoinColumn({name: 'id_miniature'})
+    miniature: File
+
     @OneToOne(() => File,(file) => file.post)
     @JoinColumn({name: 'id_file'})
     file: File

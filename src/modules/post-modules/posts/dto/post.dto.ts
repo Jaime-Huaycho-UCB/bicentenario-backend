@@ -35,6 +35,9 @@ export class PostPublicDto {
     @ApiProperty({description: 'Typo de publicacion',type: Number,nullable: false})
     type: number
 
+    @ApiProperty({description: 'Miniatura del testimonio',type: FileDto,nullable: true})
+    miniature: FileDto | null
+
     @ApiProperty({description: 'Archivo del testiomonio',type: FileDto,nullable: true})
     file: FileDto | null
 
@@ -71,4 +74,7 @@ export class inPostDto {
 
     @ApiProperty({description: 'Archivo del testimonio',type: String,format: 'binary',nullable: true,required: false})
     file?: any
+
+    @ApiProperty({description: 'Minuatura del testimonio',type: String,format: 'binary',nullable: true,required: false})
+    miniature?: any
 }

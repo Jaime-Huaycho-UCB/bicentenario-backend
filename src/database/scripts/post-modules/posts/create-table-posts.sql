@@ -1,6 +1,6 @@
 create table posts (
     id_post bigserial,
-    id_user bigserial not null,
+    id_user bigint not null,
     title varchar(300) not null,
     description varchar(800) not null,
     stars numeric(6,1) default 0,
@@ -9,6 +9,7 @@ create table posts (
     dislikes int default 0,
     id_city int not null,
     type numeric(1,0),
+    id_miniature bigint,
     id_file int,
     content text,
     is_published boolean default false,
@@ -23,6 +24,7 @@ create table posts (
     primary key (id_post),
     Foreign Key (id_user) REFERENCES users(id_user) on delete cascade,
     Foreign Key (id_city) REFERENCES cities(id_city) on delete cascade,
+    Foreign Key (id_miniature) REFERENCES files(id_file) on delete cascade,
     Foreign Key (id_file) REFERENCES files(id_file) on delete cascade,
     Foreign Key (id_status) REFERENCES post_statuses(id_status) on delete cascade,
     Foreign Key (id_curator) REFERENCES users(id_user) on delete cascade,

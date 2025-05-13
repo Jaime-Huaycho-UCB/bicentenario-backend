@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Query, Search, UseInterceptors, UploadedFile, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Query, Search, UseInterceptors, UploadedFile, Put, UseGuards, UploadedFiles } from '@nestjs/common';
 import { PostsService } from './services/posts.service';
 import { CreatePostDto, CreatePostOutDto } from './dto/create-post.dto';
 import { UpdatePostDto, UpdatePostOutDto } from './dto/update-post.dto';
 import { Response } from 'express';
 import { responseError } from 'src/common/helpers/out.helper';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiHeader, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetPostDto } from './dto/get-post.dto';
 import { DtoResponse, swaggerRes400, swaggerRes401, swaggerRes404, swaggerRes500 } from 'src/common/helpers/classes.dto';
@@ -20,7 +20,10 @@ export class PostsController {
 	@Post()
 	@ApiOperation({summary: 'Api para crear testimonios'})
 	@ApiHeader(headerAuth())
-	@UseInterceptors(FileInterceptor('file'))
+	@UseInterceptors(FileFieldsInterceptor([
+		{ name: 'file',maxCount: 1},
+		{ name: 'miniature', maxCount: 1}
+	]))
 	@ApiConsumes('multipart/form-data')
 	@ApiResponse({
 		description: 'Respuesta en caso de ingresar exitosamente el testimonio',
@@ -31,9 +34,18 @@ export class PostsController {
 	@ApiResponse(swaggerRes401())
 	@ApiResponse(swaggerRes404())
 	@ApiResponse(swaggerRes500())
-	async create(@Body() data: CreatePostDto,@UploadedFile() file: Express.Multer.File,@Res() res: Response) {
+	async create(
+		@Body() data: CreatePostDto,
+		@UploadedFiles() files: {
+			file: Express.Multer.File[],
+			miniature: Express.Multer.File[]
+		},
+		@Res() res: Response) {
 		try {
-            const newPost = await this.postsService.create(data,file);
+            const newPost = await this.postsService.create(data,
+				files.file[0],
+				files.miniature[0]
+			);
             return res.status(201).json({
                 code: 201,
                 message: 'Se creo exitosamente la publicacion',
