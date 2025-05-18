@@ -22,9 +22,14 @@ export class PostStarsService {
 		this.postStarsValidator.validateCreateStar(data);
 		const user = await this.usersService.getAUserById(data.idUser);
 		const post = await this.postsService.findOne(`${data.idPost}`);
-		const star = new PostStar();
-		star.post = post!;
-		star.user = user!;
+		let star;
+		try {
+			star = await this.findOne(data.idPost,data.idUser);
+		} catch (error) {
+			star = new PostStar();
+			star.post = post!;
+			star.user = user!;
+		}
 		star.number = data.number;
 		const starSaved = await this.postStarRepository.save(star);
 		return starSaved;
@@ -34,15 +39,37 @@ export class PostStarsService {
 		return `This action returns all postStars`;
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} postStar`;
+	async findOne(idPost: number,idUser: number) {
+		const star = await this.postStarRepository.findOne({
+			where: {
+				user: {
+					id: idUser
+				},
+				post: {
+					id: idPost
+				}
+			}
+		})
+		this.postStarsValidator.validateStar(star);
+		return star;
 	}
 
 	update(id: number, updatePostStarDto: UpdatePostStarDto) {
 		return `This action updates a #${id} postStar`;
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} postStar`;
+	async remove(idPost: number,idUser: number) {
+		const star = await this.postStarRepository.findOne({
+			where: {
+				user: {
+					id: idUser
+				},
+				post: {
+					id: idPost
+				}
+			}
+		})
+		this.postStarsValidator.validateStar(star);
+		return await this.postStarRepository.delete(star!.id);
 	}
 }

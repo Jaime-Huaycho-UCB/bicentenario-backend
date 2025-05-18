@@ -23,3 +23,10 @@ CREATE TRIGGER trg_update_post_stars_avg
 AFTER INSERT ON post_stars
 FOR EACH ROW
 EXECUTE FUNCTION update_post_stars_avg();
+
+
+-- Trigger que llama a la función después de actualizar en post_stars
+CREATE TRIGGER trg_update_post_stars_avg_after_update
+AFTER UPDATE ON post_stars
+FOR EACH ROW
+EXECUTE FUNCTION update_post_stars_avg();

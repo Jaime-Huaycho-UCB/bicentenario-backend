@@ -35,24 +35,4 @@ export class PostStarsController {
 			return responseError(error,res);
 		}
 	}
-
-	@Get()
-	findAll() {
-		return this.postStarsService.findAll();
-	}
-
-	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.postStarsService.findOne(+id);
-	}
-
-	@Patch(':id')
-	update(@Param('id') id: string, @Body() updatePostStarDto: UpdatePostStarDto) {
-		return this.postStarsService.update(+id, updatePostStarDto);
-	}
-
-	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.postStarsService.remove(+id);
-	}
 }

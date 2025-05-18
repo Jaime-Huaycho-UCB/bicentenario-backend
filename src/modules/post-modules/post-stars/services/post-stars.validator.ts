@@ -29,6 +29,12 @@ export class PostStarsValidator extends Validator {
         }
     }
 
+    validateStar(star){
+        if (!star){
+            throw new HttpException('La calificacion no se encontro',this.NOT_FOUND);
+        }
+    }
+
     validateCreateStar(data: CreatePostStarDto) {
         this.validateIdUser(data.idUser);
         this.validateIdPost(data.idPost);
