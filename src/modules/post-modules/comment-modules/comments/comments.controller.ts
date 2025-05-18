@@ -9,6 +9,7 @@ import { AuthGuard } from 'src/modules/auth/services/auth.guard';
 import { GetCommentsDto } from './dto/get-comments.dto';
 import { CreateResponseDto } from './dto/create-response.dto';
 import { DtoResponse } from 'src/common/helpers/classes.dto';
+import { GetCommentResponsesDto } from './dto/get-comment-responses.dto';
 
 @ApiTags('Comentarios')
 @Controller('comments')
@@ -97,7 +98,7 @@ export class CommentsController {
 	@ApiResponse({
 		description: 'Salida en caso de obtener las respuestas del comentario',
 		status: 200,
-		type: GetCommentsDto
+		type: GetCommentResponsesDto
 	})
 	async findAllResponses(
 		@Query('idComment') idComment: string,
