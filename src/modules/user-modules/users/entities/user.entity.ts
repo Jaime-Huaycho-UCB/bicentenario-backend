@@ -2,6 +2,7 @@ import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn
 import { Rol } from "../../rols/entities/rol.entity"
 import { Post } from "src/modules/post-modules/posts/entities/post.entity"
 import { Comment } from "src/modules/post-modules/comment-modules/comments/entities/comment.entity"
+import { PostInteraction } from "src/modules/post-modules/post-interactions/entities/post-interaction.entity"
 
 @Entity('users')
 export class User {
@@ -44,4 +45,7 @@ export class User {
 
     @OneToMany(() => Post,(post) => post.user)
     approvals: Post[]
+
+    @OneToMany(() => PostInteraction,(interaction) => interaction.user)
+    postInteractions: PostInteraction[]
 }

@@ -7,6 +7,7 @@ import { Event } from "../../event-modules/events/entities/event.entity";
 import { PostTag } from "../../tag-modules/post-tags/entities/post-tag.entity";
 import { Tag } from "../../tag-modules/tags/entities/tag.entity";
 import { Comment } from "../../comment-modules/comments/entities/comment.entity";
+import { PostInteraction } from "../../post-interactions/entities/post-interaction.entity";
 
 @Entity('posts')
 export class Post {
@@ -96,4 +97,7 @@ export class Post {
 
     @OneToMany(() => Comment,(comment) => comment.post)
     comments: Comment[]
+
+    @OneToMany(() => PostInteraction,(interaction) => interaction.post)
+    interactions: PostInteraction[]
 }

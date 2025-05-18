@@ -9,6 +9,9 @@ BEGIN
     END LOOP;
 END $$;
 
+-- files
+\i files/create-table-files.sql
+
 \i location-modules/departaments/create-table-departaments.sql
 \i location-modules/departaments/query-departaments.sql
 
@@ -35,9 +38,6 @@ END $$;
 -- post-statues
 \i post-modules/post-statuses/create-table-post-statuses.sql
 \i post-modules/post-statuses/query-post-statuses.sql
-
--- files
-\i files/create-table-files.sql
 
 -- pots
 \i post-modules/posts/create-table-posts.sql
@@ -110,8 +110,11 @@ END $$;
 
 
 -- TRIGGERS --
+
 -- post-interactions
 \i post-modules/post-interactions/triggers-post-interactions.sql
+
+-- comment-interactions
 \i post-modules/comment-modules/comment-interactions/triggers-comment-interactions.sql
 
 
