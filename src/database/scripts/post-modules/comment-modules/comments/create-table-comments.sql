@@ -1,6 +1,6 @@
 create table comments (
     id_comment bigserial,
-    id_post bigint not null,
+    id_post bigint,
     id_user bigint not null,
     content varchar(500) not null,
     likes int default 0,
