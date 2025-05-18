@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { PostInteractionsService } from './services/post-interactions.service';
 import { PostInteractionsController } from './post-interactions.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,7 +11,7 @@ import { PostInteractionsValidator } from './services/post-interactions.validato
   imports: [
     TypeOrmModule.forFeature([PostInteraction]),
     UsersModule,
-    PostsModule
+    forwardRef(() => PostsModule)
   ],
   controllers: [PostInteractionsController],
   providers: [PostInteractionsService,PostInteractionsValidator],

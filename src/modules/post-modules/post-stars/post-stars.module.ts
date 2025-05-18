@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { PostStarsService } from './services/post-stars.service';
 import { PostStarsController } from './post-stars.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,7 +10,7 @@ import { UsersModule } from 'src/modules/user-modules/users/users.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([PostStar]),
-    PostsModule,
+    forwardRef(() => PostsModule),
     UsersModule
   ],
   controllers: [PostStarsController],

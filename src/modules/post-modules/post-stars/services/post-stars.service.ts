@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreatePostStarDto } from '../dto/create-post-star.dto';
 import { UpdatePostStarDto } from '../dto/update-post-star.dto';
 import { PostStar } from '../entities/post-star.entity';
@@ -14,6 +14,7 @@ export class PostStarsService {
 		@InjectRepository(PostStar)
 		private readonly postStarRepository: Repository<PostStar>,
 		private readonly postStarsValidator: PostStarsValidator,
+		@Inject(forwardRef(() => PostsService))
 		private readonly postsService: PostsService,
 		private readonly usersService: UsersService
 	){}

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreatePostInteractionDto } from '../dto/create-post-interaction.dto';
 import { UpdatePostInteractionDto } from '../dto/update-post-interaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +15,7 @@ export class PostInteractionsService {
 		private readonly postInteractionRepository: Repository<PostInteraction>,
 		private readonly postInteractionsValidator: PostInteractionsValidator,
 		private readonly usersService: UsersService,
+		@Inject(forwardRef(() => PostsService))
 		private readonly postsService: PostsService
 	){}
 
