@@ -7,6 +7,7 @@ import { Response } from 'express';
 import { responseError } from 'src/common/helpers/out.helper';
 import { AuthGuard } from 'src/modules/auth/services/auth.guard';
 import { DtoResponse, swaggerRes400, swaggerRes401, swaggerRes404 } from 'src/common/helpers/classes.dto';
+import { PostInteractionDto } from './dto/post-interaction.dto';
 
 @ApiExcludeController(false)
 @ApiTags('Interaciones de testimonio')
@@ -52,6 +53,33 @@ export class PostInteractionsController {
 			return res.status(200).json({
 				code: 200,
 				message: 'Se dio like al testimonio'
+			})
+		} catch (error) {
+			return responseError(error,res);
+		}
+	}
+
+	// @UseGuards(AuthGuard)
+	@Get(':idPost/:idUser')
+	@ApiOperation({summary: 'Api para obtener la interacion de un usurio con un testimonio'})
+	@ApiResponse({
+		description: 'Respuesta en caso obtener exitosamente la interaccion',
+		status: 200,
+		type: PostInteractionDto
+	})
+	@ApiResponse(swaggerRes400())
+	@ApiResponse(swaggerRes401())
+	@ApiResponse(swaggerRes404())
+	async findOne(
+		@Param('idUser') idUser: string,
+		@Param('idPost') idPost: string,
+		@Res() res: Response
+	){
+		try {
+			const interaction = await this.postInteractionsService.findOne(parseInt(idPost),parseInt(idUser));
+			return res.status(200).json({
+				code: 200,
+				interaction: interaction
 			})
 		} catch (error) {
 			return responseError(error,res);

@@ -227,49 +227,7 @@ export class PostsService {
 		this.postsValidator.validatePost(post);
 		return post;
 	}
-	async findOneAndUserInfo(idPost: number, idUser: number) {
-		const post = await this.postRepository.findOne({
-			where: {
-				id: idPost
-			},
-			relations: {
-				user: true,
-				city: {
-					departament: true
-				},
-				miniature: true,
-				file: true,
-				tags: true,
-			},
-			select: {
-				id: true,
-				title: true,
-				description: true,
-				stars: true,
-				views: true,
-				likes: true,
-				dislikes: true,
-				type: true,
-				file: true,
-				miniature: true,
-				content: true,
-				createdAt: true,
-				user: {
-					id: true,
-					name: true
-				},
-			}
-		});
-		this.postsValidator.validatePost(post);
-		const userInfo = {
-			stars: (await this.postStarsService.findOne(idPost,idUser))!.number,
-			interaction: (await this.postInteractionsService.findOne(idPost,idUser))!.type
-		}
-		return {
-			post: post,
-			userInfo: userInfo
-		};
-	}
+
 	async findOneAll(id: number, { user = false, city = false, file = false, tags = false, status = false, event = false, curator = false } = {}) {
 		const post = await this.postRepository.findOne({
 			where: {
