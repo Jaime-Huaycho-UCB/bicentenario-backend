@@ -8,6 +8,7 @@ import { PostTag } from "../../tag-modules/post-tags/entities/post-tag.entity";
 import { Tag } from "../../tag-modules/tags/entities/tag.entity";
 import { Comment } from "../../comment-modules/comments/entities/comment.entity";
 import { PostInteraction } from "../../post-interactions/entities/post-interaction.entity";
+import { PostStar } from "../../post-stars/entities/post-star.entity";
 
 @Entity('posts')
 export class Post {
@@ -100,4 +101,7 @@ export class Post {
 
     @OneToMany(() => PostInteraction,(interaction) => interaction.post)
     interactions: PostInteraction[]
+
+    @OneToMany(() => PostStar,(postStar) => postStar.post)
+    postStars: PostStar[]
 }

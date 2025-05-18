@@ -1,5 +1,5 @@
 create table post_stars (
-    id_start bigserial,
+    id_star bigserial,
     id_post bigint not null,
     id_user bigint not null,
     number numeric(1,0) not null,

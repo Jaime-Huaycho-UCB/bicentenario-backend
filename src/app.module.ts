@@ -37,6 +37,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { StorageModule } from './micro-services/storage/storage.module';
 import { ComplaintsModule } from './modules/complaint-modules/complaints/complaints.module';
 import { ObjectsComplaintsModule } from './modules/complaint-modules/objects-complaints/objects-complaints.module';
+import { PostStarsModule } from './src/modules/post-modules/post-stars/post-stars.module';
+import { PostStarsModule } from './modules/post-modules/post-stars/post-stars.module';
 @Module({
   imports: [
     ConfigModule,
@@ -73,7 +75,8 @@ import { ObjectsComplaintsModule } from './modules/complaint-modules/objects-com
     SurveysAnsweredModule,
     QuestionsModule,
     QuestionAnswersModule,
-    StorageModule
+    StorageModule,
+    PostStarsModule
   ],
   controllers: [AppController],
   providers: [AppService],

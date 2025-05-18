@@ -3,6 +3,7 @@ import { Rol } from "../../rols/entities/rol.entity"
 import { Post } from "src/modules/post-modules/posts/entities/post.entity"
 import { Comment } from "src/modules/post-modules/comment-modules/comments/entities/comment.entity"
 import { PostInteraction } from "src/modules/post-modules/post-interactions/entities/post-interaction.entity"
+import { PostStar } from "src/modules/post-modules/post-stars/entities/post-star.entity"
 
 @Entity('users')
 export class User {
@@ -48,4 +49,7 @@ export class User {
 
     @OneToMany(() => PostInteraction,(interaction) => interaction.user)
     postInteractions: PostInteraction[]
+
+    @OneToMany(() => PostStar,(postStar) => postStar.user)
+    postStars: PostStar[]
 }
