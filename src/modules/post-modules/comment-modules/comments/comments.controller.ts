@@ -92,22 +92,19 @@ export class CommentsController {
 	}
 
 	// @UseGuards(AuthGuard)
-	@Get('/respones')
+	@Get('/responses/:idComment')
 	@ApiOperation({summary: 'Api para obtener todo respuestas a un comentario'})
-	@ApiQuery({name: 'idComment',required: false})
 	@ApiResponse({
 		description: 'Salida en caso de obtener las respuestas del comentario',
 		status: 200,
 		type: GetCommentResponsesDto
 	})
 	async findAllResponses(
-		@Query('idComment') idComment: string,
+		@Param('idComment') idComment: string,
 		@Res() res: Response
 	) {
 		try {
-			const responses = await this.commentsService.findAllResponses({
-				idComment: parseInt(idComment),
-			});
+			const responses = await this.commentsService.findAllResponses(parseInt(idComment));
 			return res.status(200).json({
 				code: 200,
 				responses: responses

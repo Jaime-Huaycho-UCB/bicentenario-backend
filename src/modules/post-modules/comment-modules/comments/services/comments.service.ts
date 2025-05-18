@@ -94,15 +94,12 @@ export class CommentsService {
 		return comments;
 	}
 
-	async findAllResponses(filters: {
-		idComment?: number,
-	} = {}) {
+	async findAllResponses(idComment: number) {
+		this.commentsValidator.validateIdComment(idComment);
 		const responses = await this.commentRepository.find({
 			where: {
 				isDeleted: false,
-				...(filters.idComment !== undefined && !isNaN(Number(filters.idComment)) ? {
-					head: filters.idComment
-				} : {}),
+				head: idComment
 			},
 			relations: {
 				user: true
