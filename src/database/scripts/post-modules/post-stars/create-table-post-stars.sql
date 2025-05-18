@@ -4,7 +4,7 @@ create table post_stars (
     id_user bigint not null,
     number numeric(1,0) not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    primary key (id_start),
+    primary key (id_star),
     Foreign Key (id_user) REFERENCES users(id_user) on delete cascade,
     Foreign Key (id_post) REFERENCES posts(id_post) on delete cascade
 );

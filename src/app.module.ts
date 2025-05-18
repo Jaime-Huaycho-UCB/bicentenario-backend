@@ -16,7 +16,6 @@ import { LogsModule } from './modules/logs/logs.module';
 import { PostsModule } from './modules/post-modules/posts/posts.module';
 import { PostStatusesModule } from './modules/post-modules/post-statuses/post-statuses.module';
 import { PostTagsModule } from './modules/post-modules/tag-modules/post-tags/post-tags.module';
-import { PostStartsModule } from './modules/post-modules/post-starts/post-starts.module';
 import { PostInteractionsModule } from './modules/post-modules/post-interactions/post-interactions.module';
 import { CommentsModule } from './modules/post-modules/comment-modules/comments/comments.module';
 import { CommentInteractionsModule } from './modules/post-modules/comment-modules/comment-interactions/comment-interactions.module';
@@ -37,7 +36,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { StorageModule } from './micro-services/storage/storage.module';
 import { ComplaintsModule } from './modules/complaint-modules/complaints/complaints.module';
 import { ObjectsComplaintsModule } from './modules/complaint-modules/objects-complaints/objects-complaints.module';
-import { PostStarsModule } from './src/modules/post-modules/post-stars/post-stars.module';
 import { PostStarsModule } from './modules/post-modules/post-stars/post-stars.module';
 @Module({
   imports: [
@@ -61,7 +59,6 @@ import { PostStarsModule } from './modules/post-modules/post-stars/post-stars.mo
     PostsModule,
     PostStatusesModule,
     PostTagsModule,
-    PostStartsModule,
     PostInteractionsModule,
     CommentsModule,
     CommentInteractionsModule,

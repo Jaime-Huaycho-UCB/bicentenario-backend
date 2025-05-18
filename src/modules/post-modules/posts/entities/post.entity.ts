@@ -25,7 +25,7 @@ export class Post {
     @Column({name: 'description'})
     description: string
 
-    @Column({name: 'stars'})
+    @Column({name: 'stars',type: 'numeric',scale: 6,precision: 1})
     stars: number
 
     @Column({name: 'views'})

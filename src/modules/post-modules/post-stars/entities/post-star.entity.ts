@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 import { Post } from "../../posts/entities/post.entity";
 import { User } from "src/modules/user-modules/users/entities/user.entity";
 
-@Entity('post_starts')
+@Entity('post_stars')
 export class PostStar {
     @PrimaryGeneratedColumn({name: 'id_star'})
     id: number

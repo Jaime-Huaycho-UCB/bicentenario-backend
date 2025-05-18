@@ -113,6 +113,8 @@ END $$;
 
 -- post-interactions
 \i post-modules/post-interactions/triggers-post-interactions.sql
+-- post-stars
+\i post-modules/post-stars/triggers-post-stars.sql
 
 -- comment-interactions
 \i post-modules/comment-modules/comment-interactions/triggers-comment-interactions.sql
