@@ -20,11 +20,6 @@ export class PostsController {
 	@Post()
 	@ApiOperation({summary: 'Api para crear testimonios'})
 	@ApiHeader(headerAuth())
-	@UseInterceptors(FileFieldsInterceptor([
-		{ name: 'file',maxCount: 1},
-		{ name: 'miniature', maxCount: 1}
-	]))
-	@ApiConsumes('multipart/form-data')
 	@ApiResponse({
 		description: 'Respuesta en caso de ingresar exitosamente el testimonio',
 		status: 201,
@@ -34,18 +29,9 @@ export class PostsController {
 	@ApiResponse(swaggerRes401())
 	@ApiResponse(swaggerRes404())
 	@ApiResponse(swaggerRes500())
-	async create(
-		@Body() data: CreatePostDto,
-		@UploadedFiles() files: {
-			file: Express.Multer.File[],
-			miniature: Express.Multer.File[]
-		},
-		@Res() res: Response) {
+	async create(@Body() data: CreatePostDto,@Res() res: Response) {
 		try {
-            const newPost = await this.postsService.create(data,
-				files.file[0],
-				files.miniature[0]
-			);
+            const newPost = await this.postsService.create(data);
             return res.status(201).json({
                 code: 201,
                 message: 'Se creo exitosamente la publicacion',
@@ -115,12 +101,10 @@ export class PostsController {
 		return this.postsService.findOne(id);
 	}
 
-	@UseGuards(AuthGuard)
+	// @UseGuards(AuthGuard)
 	@Put(':id')
 	@ApiOperation({summary: 'Api para la actualizacion de testimonio'})
 	@ApiHeader(headerAuth())
-	@ApiConsumes('multipart/form-data')
-	@UseInterceptors(FileInterceptor('file'))
 	@ApiResponse({
 		description: 'Respuesta en caso de actualizar exitosamente',
 		status: 200,
@@ -130,9 +114,9 @@ export class PostsController {
 	@ApiResponse(swaggerRes401())
 	@ApiResponse(swaggerRes404())
 	@ApiResponse(swaggerRes500())
-	async update(@Param('id') id: string, @Body() data: UpdatePostDto,@UploadedFile() file: Express.Multer.File,@Res() res: Response) {
+	async update(@Param('id') id: string, @Body() data: UpdatePostDto,@Res() res: Response) {
 		try {
-			const updatedPost = await this.postsService.update(id,data,file);
+			const updatedPost = await this.postsService.update(id,data);
 			return res.status(200).json({
 				code: 200,
 				message: 'Se actualizo exitosamente el testimonio',
@@ -144,7 +128,7 @@ export class PostsController {
 		}
 	}
 
-	@UseGuards(AuthGuard)
+	// @UseGuards(AuthGuard)
 	@Delete(':id')
 	@ApiOperation({summary: 'Api para eliminar un testimonio'})
 	@ApiHeader(headerAuth())

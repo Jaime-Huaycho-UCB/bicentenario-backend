@@ -72,9 +72,9 @@ export class inPostDto {
     @ApiProperty({description: 'Ids de las etiquetas relacionadas con el testimonio',type: String,nullable: true,example: '1,2,3',required: false})
     tags?: string
 
-    @ApiProperty({description: 'Archivo del testimonio',type: String,format: 'binary',nullable: true,required: false})
-    file?: any
+    @ApiProperty({description: 'Archivo del testimonio',type: FileDto,nullable: true,required: false})
+    fileData?: FileDto
 
-    @ApiProperty({description: 'Minuatura del testimonio',type: String,format: 'binary',nullable: true,required: false})
-    miniature?: any
+    @ApiProperty({description: 'Minuatura del testimonio',type: FileDto,nullable: true,required: false})
+    miniatureData?: FileDto
 }

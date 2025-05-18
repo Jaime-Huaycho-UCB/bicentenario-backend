@@ -4,15 +4,18 @@ import { UpdateFileDto } from '../dto/update-file.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { File } from '../entities/files.entity';
 import { Repository } from 'typeorm';
+import { FilesValidator } from './files.validator';
 
 @Injectable()
 export class FilesService {
 	constructor(
 		@InjectRepository(File)
-		private readonly fileRepository: Repository<File>
+		private readonly fileRepository: Repository<File>,
+		private readonly filesValidator: FilesValidator
 	){}
 
 	async create(data: CreateFileDto) {
+		this.filesValidator.validateCreateFile(data);
 		const file = new File();
         file.name = data.name;
         file.route = data.route;

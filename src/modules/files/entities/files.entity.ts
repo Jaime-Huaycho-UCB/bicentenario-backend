@@ -1,3 +1,4 @@
+import { Event } from "src/modules/post-modules/event-modules/events/entities/event.entity";
 import { Post } from "src/modules/post-modules/posts/entities/post.entity";
 import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
@@ -26,4 +27,7 @@ export class File {
 
     @OneToOne(() => Post,(post) => post.file)
     post: Post
+
+    @OneToOne(() => Event,(event) => event.file)
+    event: Event
 }

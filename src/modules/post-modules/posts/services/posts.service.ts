@@ -8,7 +8,6 @@ import { PostsValidator } from './posts.validator';
 import { UsersService } from 'src/modules/user-modules/users/services/users.service';
 import { CitiesService } from 'src/modules/location-modules/cities/services/cities.service';
 import { FilesService } from 'src/modules/files/services/files.service';
-import { StorageService } from 'src/micro-services/storage/storage.service';
 import { PostStatusesService } from '../../post-statuses/services/post-statuses.service';
 import { EventsService } from '../../event-modules/events/services/events.service';
 import { PostTagsService } from '../../tag-modules/post-tags/post-tags.service';
@@ -23,14 +22,13 @@ export class PostsService {
 		private readonly usersService: UsersService,
 		private readonly citiesService: CitiesService,
 		private readonly filesService: FilesService,
-		private readonly storageService: StorageService,
 		private readonly postStatusesService: PostStatusesService,
 		private readonly eventsService: EventsService,
 		private readonly postTagsService: PostTagsService,
 		private readonly tagsService: TagsService
 	) { }
 
-	async create(data: CreatePostDto, file: Express.Multer.File,miniature: Express.Multer.File) {
+	async create(data: CreatePostDto) {
 		this.postsValidator.validateCreatePost(data);
 		const idUser = this.postsValidator.validateIdUser(data.idUser);
 		const idCity = this.postsValidator.validateIdCity(data.idCity);
@@ -39,45 +37,37 @@ export class PostsService {
 		if (data.tags) {
 			tags = await this.postsValidator.validateTags(data.tags);
 		}
-
 		const user = await this.usersService.getAUserById(idUser);
 		const city = await this.citiesService.findOne(idCity);
-		let miniatureRegistered;
-		let fileRegistered;
-		if (miniature != null){
-			const miniatureSaved = await this.storageService.uploadFile(miniature);
-			miniatureRegistered = await this.filesService.create(miniatureSaved);
-		}
-		if (file != null) {
-			const fileSaved = await this.storageService.uploadFile(file);
-			fileRegistered = await this.filesService.create(fileSaved);
-		}
 		const status = await this.postStatusesService.findOne(1);
 		let event;
 		if ((data.idEvent)) {
 			event = await this.eventsService.findOne(parseInt(data.idEvent));
 		}
+
 		const post = new Post();
 		post.user = user!;
 		post.title = data.title;
 		post.description = data.description;
 		post.city = city!;
 		post.type = type;
-		if (miniature){
-			post.miniature = miniatureRegistered;
+		if (data.fileData) {
+			const fileSaved = await this.filesService.create(data.fileData);
+			post.file = fileSaved;
 		}
-		if (file) {
-			post.file = fileRegistered;
+		if (data.miniatureData) {
+			const miniatureSaved = await this.filesService.create(data.miniatureData);
+			post.miniature = miniatureSaved;
 		}
 		if (data.content) {
 			post.content = data.content;
 		}
 		post.status = status!;
 		post.curator = null;
-		if (data.idEvent || event) {
+		if (event) {
 			post.event = event;
 		}
-		let postTagsSaved: number[] = [];
+		let postTagsSaved;
 		const postSaved = await this.postRepository.save(post);
 		if (tags.length > 0) {
 			postTagsSaved = await this.postTagsService.create(postSaved.id, tags);
@@ -85,13 +75,18 @@ export class PostsService {
 		return await this.findOne(`${postSaved.id}`);
 	}
 
-	async getSuggestions() {
+	async getSuggestions(filters: {
+		limit?: number
+	} = {}) {
 		const suggestions = await this.postRepository.find({
 			where: {
 				isDeleted: false,
 				head: IsNull()
 			},
-			select: ['title']
+			select: ['title'],
+			...(filters.limit ? {
+				take: filters.limit
+			} : {})
 		});
 
 		return suggestions;
@@ -117,7 +112,7 @@ export class PostsService {
 			.leftJoinAndSelect('post.event', 'event')
 			.leftJoinAndSelect('post.tags', 'tags')
 			.where('post.isDeleted = false')
-			// .andWhere('post.head IS NULL');
+		// .andWhere('post.head IS NULL');
 		if (filters.search) {
 			query.andWhere('post.title ILIKE :search', { search: `%${filters.search}%` });
 		}
@@ -130,11 +125,11 @@ export class PostsService {
 		if (!isNaN(filters.idEvent)) {
 			query.andWhere('event.id = :idEvent', { idEvent: filters.idEvent });
 		}
-		if (!isNaN(filters.type)){
-			query.andWhere('post.type = :type',{type: filters.type})
+		if (!isNaN(filters.type)) {
+			query.andWhere('post.type = :type', { type: filters.type })
 		}
-		if (!isNaN(filters.idUser)){
-			query.andWhere('user.id = :idUser',{idUser: filters.idUser})
+		if (!isNaN(filters.idUser)) {
+			query.andWhere('user.id = :idUser', { idUser: filters.idUser })
 		}
 		if (tags.length > 0) {
 			query
@@ -187,38 +182,40 @@ export class PostsService {
 	}
 
 
-	async findOne(id: string,relations = true) {
+	async findOne(id: string, relations = true) {
 		const idPost = this.postsValidator.validateIdPost(id);
-		
+
 		let post;
-		if (relations){
+		if (relations) {
 			post = await this.postRepository.createQueryBuilder('post')
-			.leftJoinAndSelect('post.user', 'user')
-			.leftJoinAndSelect('post.city', 'city')
-			.leftJoinAndSelect('city.departament', 'departament')
-			.leftJoinAndSelect('post.file', 'file')
-			.leftJoinAndSelect('post.tags', 'tags')
-			.where('post.id = :id',{id: id})
-			.select([
-				'post.id',
-				'post.title',
-				'post.description',
-				'post.stars',
-				'post.views',
-				'post.likes',
-				'post.dislikes',
-				'post.type',
-				'post.content',
-				'post.createdAt',
-				'user.id',
-				'user.name',
-				'city',
-				'departament',
-				'file',
-				'tags'
-			])
-			.getOne();
-		}else{
+				.leftJoinAndSelect('post.user', 'user')
+				.leftJoinAndSelect('post.city', 'city')
+				.leftJoinAndSelect('city.departament', 'departament')
+				.leftJoinAndSelect('post.file', 'file')
+				.leftJoinAndSelect('post.miniature', 'miniature')
+				.leftJoinAndSelect('post.tags', 'tags')
+				.where('post.id = :id', { id: id })
+				.select([
+					'post.id',
+					'post.title',
+					'post.description',
+					'post.stars',
+					'post.views',
+					'post.likes',
+					'post.dislikes',
+					'post.type',
+					'post.content',
+					'post.createdAt',
+					'user.id',
+					'user.name',
+					'city',
+					'departament',
+					'file',
+					'miniature',
+					'tags'
+				])
+				.getOne();
+		} else {
 			post = await this.postRepository.findOne({
 				where: {
 					id: idPost
@@ -228,7 +225,7 @@ export class PostsService {
 		this.postsValidator.validatePost(post);
 		return post;
 	}
-	async findOneAll(id: number,{user = false,city = false,file = false,tags = false,status = false, event= false,curator = false} = {}){
+	async findOneAll(id: number, { user = false, city = false, file = false, tags = false, status = false, event = false, curator = false } = {}) {
 		const post = await this.postRepository.findOne({
 			where: {
 				id: id
@@ -243,34 +240,33 @@ export class PostsService {
 				status: status,
 				event: event,
 				curator: curator,
-				
+
 			},
 		});
 		return post
 	}
 
-	async update(idString: string, data: UpdatePostDto,file: Express.Multer.File) {
+	async update(idString: string, data: UpdatePostDto) {
 		const post = await this.findOneAll(parseInt(idString));
 		const { id, ...newChildPost } = post!;
-		if (data.title){
+		if (data.title) {
 			post!.title = data.title!;
 		}
-		if (data.description){
+		if (data.description) {
 			post!.description = data.description!;
 		}
-		if (data.idCity){
+		if (data.idCity) {
 			const city = await this.citiesService.findOne(parseInt(data.idCity))
 			post!.city = city!;
 		}
-		if (data.type){
+		if (data.type) {
 			post!.type = this.postsValidator.validateType(data.type!);
 		}
-		if (file){
-			const fileUploaded = await this.storageService.uploadFile(file);
-			const newFile = await this.filesService.create(fileUploaded);
+		if (data.fileData) {
+			const newFile = await this.filesService.create(data.fileData);
 			post!.file = newFile;
 		}
-		if (data.content){
+		if (data.content) {
 			post!.content = data.content;
 		}
 		// if (parseInt(data.idEvent!) != post!.event.id && data.idEvent){
@@ -279,17 +275,17 @@ export class PostsService {
 		// }
 		newChildPost.head = post!.id;
 		let child;
-		if (post!.child){
-			const foundChild = await this.postRepository.findOne({where: {id: post!.child}});
+		if (post!.child) {
+			const foundChild = await this.postRepository.findOne({ where: { id: post!.child } });
 			if (foundChild) {
 				child = foundChild;
 			}
 			newChildPost.child = post!.child;
 		}
 		const childPostSaved = await this.postRepository.save(newChildPost);
-		if (child){
+		if (child) {
 			child.head = childPostSaved.id
-			await this.postRepository.save({...child});
+			await this.postRepository.save({ ...child });
 		}
 		post!.child = childPostSaved.id;
 		await this.postRepository.save(post!);

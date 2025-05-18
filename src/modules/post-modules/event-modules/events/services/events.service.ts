@@ -6,6 +6,7 @@ import { Event } from '../entities/event.entity';
 import { Repository } from 'typeorm';
 import { CitiesService } from 'src/modules/location-modules/cities/services/cities.service';
 import { EventsValidator } from './events.validator';
+import { FilesService } from 'src/modules/files/services/files.service';
 
 @Injectable()
 export class EventsService {
@@ -14,17 +15,20 @@ export class EventsService {
 		private readonly eventRepository: Repository<Event>,
 		private readonly eventsValidator: EventsValidator,
 		private readonly citiesService: CitiesService,
-		
+		private readonly filesService: FilesService
 	) { }
 
 	async create(data: CreateEventDto) {
 		this.eventsValidator.validateCreateEvent(data);
 		const city = await this.citiesService.findOne(data.idCity);
+		const fileSaved = await this.filesService.create(data.fileData);
+
 		const event = new Event();
 		event.title = data.title;
 		event.description = data.description;
 		event.content = data.content;
 		event.city = city!;
+		event.file = fileSaved;
 		await this.eventRepository.save(event);
 		return 'Se creo el evento exitosamente';
 	}
