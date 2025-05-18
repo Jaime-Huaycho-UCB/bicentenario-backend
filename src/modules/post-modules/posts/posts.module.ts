@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { PostsService } from './services/posts.service';
 import { PostsController } from './posts.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -12,6 +12,8 @@ import { EventsModule } from '../event-modules/events/events.module';
 import { StorageModule } from 'src/micro-services/storage/storage.module';
 import { PostTagsModule } from '../tag-modules/post-tags/post-tags.module';
 import { TagsModule } from '../tag-modules/tags/tags.module';
+import { PostInteractionsModule } from '../post-interactions/post-interactions.module';
+import { PostStarsModule } from '../post-stars/post-stars.module';
 
 @Module({
   imports: [
@@ -23,7 +25,9 @@ import { TagsModule } from '../tag-modules/tags/tags.module';
     EventsModule,
     StorageModule,
     PostTagsModule,
-    TagsModule
+    TagsModule,
+    forwardRef(() => PostInteractionsModule),
+    forwardRef(() => PostStarsModule),
   ],
   controllers: [PostsController],
   providers: [PostsService,PostsValidator],

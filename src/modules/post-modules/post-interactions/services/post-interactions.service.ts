@@ -43,6 +43,23 @@ export class PostInteractionsService {
     	return interactionSaved;
 	}
 
+	async findOne(idPost: number,idUser: number){
+		this.postInteractionsValidator.validateIdPost(idPost);
+		this.postInteractionsValidator.validateIdUser(idUser);
+		const interaction = await this.postInteractionRepository.findOne({
+			where: {
+				post: {
+					id: idPost
+				},
+				user: {
+					id: idUser
+				}
+			}
+		});
+		this.postInteractionsValidator.validateInteraction(interaction);
+		return interaction;
+	}
+
 	async remove(idPost: number,idUser: number) {
 		this.postInteractionsValidator.validateIdPost(idPost);
 		this.postInteractionsValidator.validateIdUser(idUser);
@@ -51,7 +68,7 @@ export class PostInteractionsService {
 		const interaction = await this.postInteractionRepository.findOne({
 			where: {
 				post: {
-					id: post.id
+					id: post!.id
 				},
 				user: {
 					id: user!.id

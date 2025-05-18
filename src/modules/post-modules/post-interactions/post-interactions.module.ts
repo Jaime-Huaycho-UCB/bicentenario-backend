@@ -15,5 +15,6 @@ import { PostInteractionsValidator } from './services/post-interactions.validato
   ],
   controllers: [PostInteractionsController],
   providers: [PostInteractionsService,PostInteractionsValidator],
+  exports: [PostInteractionsService]
 })
 export class PostInteractionsModule {}

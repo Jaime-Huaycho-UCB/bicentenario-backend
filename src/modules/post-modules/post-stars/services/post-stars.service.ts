@@ -40,6 +40,8 @@ export class PostStarsService {
 	}
 
 	async findOne(idPost: number,idUser: number) {
+		this.postStarsValidator.validateIdPost(idPost);
+		this.postStarsValidator.validateIdUser(idUser);
 		const star = await this.postStarRepository.findOne({
 			where: {
 				user: {

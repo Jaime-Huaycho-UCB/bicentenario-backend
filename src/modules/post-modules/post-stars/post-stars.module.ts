@@ -15,5 +15,6 @@ import { UsersModule } from 'src/modules/user-modules/users/users.module';
   ],
   controllers: [PostStarsController],
   providers: [PostStarsService,PostStarsValidator],
+  exports: [PostStarsService]
 })
 export class PostStarsModule {}

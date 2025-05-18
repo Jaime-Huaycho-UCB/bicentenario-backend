@@ -97,8 +97,36 @@ export class PostsController {
 
 	@Get(':id')
 	@ApiOperation({summary: 'Api para obtener un solo tsetimonio'})
-	findOne(@Param('id') id: string) {
-		return this.postsService.findOne(id);
+	async findOne(
+		@Param('id') id: string,
+		@Res() res: Response
+	) {
+		try {
+			const post = await this.postsService.findOne(id)
+			return res.status(200).json({
+				code: 200,
+				post: post
+			})
+		} catch (error) {
+			return responseError(error,res);
+		}
+	}
+	@Get(':id/:idUser')
+	@ApiOperation({summary: 'Api para obtener un solo tsetimonio e informacion del usuario'})
+	async findOneAndUserInfo(
+		@Param('id') id: string,
+		@Param('idUser') idUser: string,
+		@Res() res: Response
+	) {
+		try {
+			const response = await this.postsService.findOneAndUserInfo(parseInt(id),parseInt(idUser));
+			return res.status(200).json({
+				code: 200,
+				...response
+			})
+		} catch (error) {
+			return responseError(error,res);
+		}
 	}
 
 	// @UseGuards(AuthGuard)

@@ -12,6 +12,9 @@ import { PostStatusesService } from '../../post-statuses/services/post-statuses.
 import { EventsService } from '../../event-modules/events/services/events.service';
 import { PostTagsService } from '../../tag-modules/post-tags/post-tags.service';
 import { TagsService } from '../../tag-modules/tags/services/tags.service';
+import { number } from 'joi';
+import { PostStarsService } from '../../post-stars/services/post-stars.service';
+import { PostInteractionsService } from '../../post-interactions/services/post-interactions.service';
 
 @Injectable()
 export class PostsService {
@@ -25,7 +28,9 @@ export class PostsService {
 		private readonly postStatusesService: PostStatusesService,
 		private readonly eventsService: EventsService,
 		private readonly postTagsService: PostTagsService,
-		private readonly tagsService: TagsService
+		private readonly tagsService: TagsService,
+		private readonly postStarsService: PostStarsService,
+		private readonly postInteractionsService: PostInteractionsService
 	) { }
 
 	async create(data: CreatePostDto) {
@@ -182,48 +187,86 @@ export class PostsService {
 	}
 
 
-	async findOne(id: string, relations = true) {
-		const idPost = this.postsValidator.validateIdPost(id);
+	async findOne(id: string | number) {
+		const idPost = this.postsValidator.validateIdPost(typeof id === 'number' ? `${id}` : id);
 
-		let post;
-		if (relations) {
-			post = await this.postRepository.createQueryBuilder('post')
-				.leftJoinAndSelect('post.user', 'user')
-				.leftJoinAndSelect('post.city', 'city')
-				.leftJoinAndSelect('city.departament', 'departament')
-				.leftJoinAndSelect('post.file', 'file')
-				.leftJoinAndSelect('post.miniature', 'miniature')
-				.leftJoinAndSelect('post.tags', 'tags')
-				.where('post.id = :id', { id: id })
-				.select([
-					'post.id',
-					'post.title',
-					'post.description',
-					'post.stars',
-					'post.views',
-					'post.likes',
-					'post.dislikes',
-					'post.type',
-					'post.content',
-					'post.createdAt',
-					'user.id',
-					'user.name',
-					'city',
-					'departament',
-					'file',
-					'miniature',
-					'tags'
-				])
-				.getOne();
-		} else {
-			post = await this.postRepository.findOne({
-				where: {
-					id: idPost
+		const post = await this.postRepository.findOne({
+			where: {
+				id: idPost
+			},
+			relations: {
+				user: true,
+				city: {
+					departament: true
+				},
+				miniature: true,
+				file: true,
+				tags: true
+			},
+			select: {
+				id: true,
+				title: true,
+				description: true,
+				stars: true,
+				views: true,
+				likes: true,
+				dislikes: true,
+				type: true,
+				file: true,
+				miniature: true,
+				content: true,
+				createdAt: true,
+				user: {
+					id: true,
+					name: true
 				}
-			})
-		}
+			}
+		});
 		this.postsValidator.validatePost(post);
 		return post;
+	}
+	async findOneAndUserInfo(idPost: number, idUser: number) {
+		const post = await this.postRepository.findOne({
+			where: {
+				id: idPost
+			},
+			relations: {
+				user: true,
+				city: {
+					departament: true
+				},
+				miniature: true,
+				file: true,
+				tags: true,
+			},
+			select: {
+				id: true,
+				title: true,
+				description: true,
+				stars: true,
+				views: true,
+				likes: true,
+				dislikes: true,
+				type: true,
+				file: true,
+				miniature: true,
+				content: true,
+				createdAt: true,
+				user: {
+					id: true,
+					name: true
+				},
+			}
+		});
+		this.postsValidator.validatePost(post);
+		const userInfo = {
+			stars: (await this.postStarsService.findOne(idPost,idUser))!.number,
+			interaction: (await this.postInteractionsService.findOne(idPost,idUser))!.type
+		}
+		return {
+			post: post,
+			userInfo: userInfo
+		};
 	}
 	async findOneAll(id: number, { user = false, city = false, file = false, tags = false, status = false, event = false, curator = false } = {}) {
 		const post = await this.postRepository.findOne({
@@ -295,7 +338,7 @@ export class PostsService {
 	async remove(id: string) {
 		const post = await this.findOne(id);
 		post!.isDeleted = true;
-		await this.postRepository.save(post);
+		await this.postRepository.save(post!);
 		return true;
 	}
 }
