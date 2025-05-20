@@ -9,6 +9,12 @@ export class Departament {
     @Column({name: 'name'})
     name: string
 
+    @Column({name: 'latitude',type: 'float'})
+    latitude: number
+
+    @Column({name: 'longitude',type: 'float'})
+    longitude: number
+
     @OneToMany(() => City,(city) => city.departament)
     cities: City[]
 }
