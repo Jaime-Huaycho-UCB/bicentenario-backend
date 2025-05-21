@@ -49,12 +49,55 @@ export class UserFoldersService {
 		return folders;
 	}
 
-	async findOne(idFolder: number) {
+	async findOne(
+		idFolder: number,
+		relations: {
+			posts?: boolean
+		} = {}
+	) {
 		this.userFoldersValidator.validateIdFolder(idFolder);
 		const folder = await this.userFolderRepository.findOne({
 			where: {
 				isDeleted: false,
 				id: idFolder
+			},
+			relations: {
+				...(relations.posts ? {
+					posts: {
+						user: true,
+						city: {
+							departament: true
+						},
+						miniature: true,
+						file: true,
+						tags: true
+					}
+				}:{})
+			},
+			select: {
+				...(relations.posts ? {
+					posts: {
+						id: true,
+						title: true,
+						description: true,
+						stars: true,
+						views: true,
+						likes: true,
+						dislikes: true,
+						type: true,
+						file: true,
+						miniature: true,
+						content: true,
+						createdAt: true,
+						user: {
+							id: true,
+							name: true
+						}
+					}
+				}:{}),
+				id: true,
+				name: true,
+				createdAt: true
 			}
 		})
 		this.userFoldersValidator.validateFolder(folder);

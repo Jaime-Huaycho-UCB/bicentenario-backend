@@ -8,6 +8,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/modules/auth/services/auth.guard';
 import { DtoResponse, swaggerRes400, swaggerRes401, swaggerRes404 } from 'src/common/helpers/classes.dto';
 import { FindAllUserFoldersDto } from './dto/find-all-user-folders.dto';
+import { FindOneUserFolderDto } from './dto/find-one-user-folder.dto';
 
 @ApiTags('Colecciones de usuario')
 @Controller('user-folders')
@@ -55,6 +56,29 @@ export class UserFoldersController {
 			return res.status(200).json({
 				code: 200,
 				folders: folders
+			})
+		} catch (error) {
+			return responseError(error,res);
+		}
+	}
+
+	// @UseGuards(AuthGuard)
+	@Get('/one/:idFolder')
+	@ApiOperation({summary: 'Api para obtener una coleccion con sus testimonios'})
+	@ApiResponse({
+		description: 'Respuesta en caso de obtener la coleccion exitosamente',
+		status: 200,
+		type: FindOneUserFolderDto
+	})
+	@ApiResponse(swaggerRes400())
+	@ApiResponse(swaggerRes401())
+	@ApiResponse(swaggerRes404())
+	async findOne(@Param('idFolder') idFolder: string,@Res() res: Response){
+		try {
+			const folder = await this.userFoldersService.findOne(parseInt(idFolder),{posts: true});
+			return res.status(200).json({
+				code: 200,
+				folder: folder
 			})
 		} catch (error) {
 			return responseError(error,res);

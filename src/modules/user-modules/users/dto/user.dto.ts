@@ -4,6 +4,9 @@ import { RolDto } from "../../rols/dto/rol.dto";
 // import { DtoRol } from "./rol.dto";
 
 export class DtoUserName {
+    @ApiProperty({description: 'Id del usuario',type: Number,nullable: false})
+    id: number
+    
     @ApiProperty({description: 'Nombre del propietario de la publicacion'})
     name: string
 }

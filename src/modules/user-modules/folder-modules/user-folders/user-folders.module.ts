@@ -13,5 +13,6 @@ import { UsersModule } from '../../users/users.module';
   ],
   controllers: [UserFoldersController],
   providers: [UserFoldersService,UserFoldersValidator],
+  exports: [UserFoldersService]
 })
 export class UserFoldersModule {}
