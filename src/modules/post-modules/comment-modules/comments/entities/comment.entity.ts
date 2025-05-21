@@ -1,6 +1,7 @@
 import { Post } from "src/modules/post-modules/posts/entities/post.entity";
 import { User } from "src/modules/user-modules/users/entities/user.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { CommentInteraction } from "../../comment-interactions/entities/comment-interaction.entity";
 
 @Entity('comments')
 export class Comment {
@@ -32,4 +33,7 @@ export class Comment {
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamp without time zone' })
     createdAt: Timestamp
+
+    @OneToMany(() => CommentInteraction,(interaction) => interaction.comment)
+    interactions: CommentInteraction[]
 }

@@ -4,6 +4,7 @@ import { Post } from "src/modules/post-modules/posts/entities/post.entity"
 import { Comment } from "src/modules/post-modules/comment-modules/comments/entities/comment.entity"
 import { PostInteraction } from "src/modules/post-modules/post-interactions/entities/post-interaction.entity"
 import { PostStar } from "src/modules/post-modules/post-stars/entities/post-star.entity"
+import { CommentInteraction } from "src/modules/post-modules/comment-modules/comment-interactions/entities/comment-interaction.entity"
 
 @Entity('users')
 export class User {
@@ -52,4 +53,7 @@ export class User {
 
     @OneToMany(() => PostStar,(postStar) => postStar.user)
     postStars: PostStar[]
+
+    @OneToMany(() => CommentInteraction,(interaction) => interaction.user)
+    commentInteractions: CommentInteraction[]
 }
