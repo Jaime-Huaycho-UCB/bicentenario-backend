@@ -5,6 +5,7 @@ import { Comment } from "src/modules/post-modules/comment-modules/comments/entit
 import { PostInteraction } from "src/modules/post-modules/post-interactions/entities/post-interaction.entity"
 import { PostStar } from "src/modules/post-modules/post-stars/entities/post-star.entity"
 import { CommentInteraction } from "src/modules/post-modules/comment-modules/comment-interactions/entities/comment-interaction.entity"
+import { UserFolder } from "../../folder-modules/user-folders/entities/user-folder.entity"
 
 @Entity('users')
 export class User {
@@ -56,4 +57,7 @@ export class User {
 
     @OneToMany(() => CommentInteraction,(interaction) => interaction.user)
     commentInteractions: CommentInteraction[]
+
+    @OneToMany(() => UserFolder,(folder) => folder.user)
+    folders: UserFolder[]
 }

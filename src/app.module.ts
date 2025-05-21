@@ -6,7 +6,6 @@ import { RolsModule } from './modules/user-modules/rols/rols.module';
 import { RequestsInvestigatorModule } from './modules/user-modules/requests-investigator/requests-investigator.module';
 import { DownloadUsersModule } from './modules/user-modules/download-users/download-users.module';
 import { HistoryPostsModule } from './modules/user-modules/history-posts/history-posts.module';
-import { UserForldersModule } from './modules/user-modules/folder-modules/user-forlders/user-forlders.module';
 import { FolderPostsModule } from './modules/user-modules/folder-modules/folder-posts/folder-posts.module';
 import { ComplaintStatusesModule } from './modules/complaint-modules/complaint-statuses/complaint-statuses.module';
 import { DepartamentsModule } from './modules/location-modules/departaments/departaments.module';
@@ -37,6 +36,7 @@ import { StorageModule } from './micro-services/storage/storage.module';
 import { ComplaintsModule } from './modules/complaint-modules/complaints/complaints.module';
 import { ObjectsComplaintsModule } from './modules/complaint-modules/objects-complaints/objects-complaints.module';
 import { PostStarsModule } from './modules/post-modules/post-stars/post-stars.module';
+import { UserFoldersModule } from './modules/user-modules/folder-modules/user-folders/user-folders.module';
 @Module({
   imports: [
     ConfigModule,
@@ -47,7 +47,6 @@ import { PostStarsModule } from './modules/post-modules/post-stars/post-stars.mo
     RequestsInvestigatorModule,
     DownloadUsersModule,
     HistoryPostsModule,
-    UserForldersModule,
     FolderPostsModule,
     ComplaintStatusesModule,
     ComplaintsModule,
@@ -73,7 +72,8 @@ import { PostStarsModule } from './modules/post-modules/post-stars/post-stars.mo
     QuestionsModule,
     QuestionAnswersModule,
     StorageModule,
-    PostStarsModule
+    PostStarsModule,
+    UserFoldersModule
   ],
   controllers: [AppController],
   providers: [AppService],
