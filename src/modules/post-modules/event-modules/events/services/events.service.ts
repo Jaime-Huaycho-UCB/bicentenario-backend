@@ -21,14 +21,14 @@ export class EventsService {
 	async create(data: CreateEventDto) {
 		this.eventsValidator.validateCreateEvent(data);
 		const city = await this.citiesService.findOne(data.idCity);
-		const fileSaved = await this.filesService.create(data.fileData);
+		// const fileSaved = await this.filesService.create(data.fileData);
 
 		const event = new Event();
 		event.title = data.title;
 		event.description = data.description;
 		event.content = data.content;
 		event.city = city!;
-		event.file = fileSaved;
+		// event.file = fileSaved;
 		await this.eventRepository.save(event);
 		return 'Se creo el evento exitosamente';
 	}
