@@ -15,6 +15,7 @@ import { TagsService } from '../../tag-modules/tags/services/tags.service';
 import { number } from 'joi';
 import { PostStarsService } from '../../post-stars/services/post-stars.service';
 import { PostInteractionsService } from '../../post-interactions/services/post-interactions.service';
+import { UserHistoriesService } from 'src/modules/user-modules/user-histories/services/user-histories.service';
 
 @Injectable()
 export class PostsService {
@@ -32,7 +33,9 @@ export class PostsService {
 		@Inject(forwardRef(() => PostStarsService))
 		private readonly postStarsService: PostStarsService,
 		@Inject(forwardRef(() => PostInteractionsService))
-		private readonly postInteractionsService: PostInteractionsService
+		private readonly postInteractionsService: PostInteractionsService,
+		@Inject(forwardRef(() => UserHistoriesService))
+		private readonly userHistoriesService: UserHistoriesService
 	) { }
 
 	async create(data: CreatePostDto) {
@@ -189,7 +192,7 @@ export class PostsService {
 	}
 
 
-	async findOne(id: string | number) {
+	async findOne(id: string | number,idUser: number = NaN) {
 		const idPost = this.postsValidator.validateIdPost(typeof id === 'number' ? `${id}` : id);
 
 		const post = await this.postRepository.findOne({
@@ -225,6 +228,10 @@ export class PostsService {
 			}
 		});
 		this.postsValidator.validatePost(post);
+		if (!isNaN(idUser)){
+			const user = await this.usersService.getAUserById(idUser);
+			const history = await this.userHistoriesService.create({idPost: post!.id,idUser: idUser}, post, user);
+		}
 		return post;
 	}
 

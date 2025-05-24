@@ -97,12 +97,14 @@ export class PostsController {
 
 	@Get(':id')
 	@ApiOperation({summary: 'Api para obtener un solo tsetimonio'})
+	@ApiQuery({description: 'Id del usurio que ve el video para el registro es su historial(opcional)',name: 'visit',required: false,type: String,example: '1'})
 	async findOne(
 		@Param('id') id: string,
+		@Query('visit') idUser: string,
 		@Res() res: Response
 	) {
 		try {
-			const post = await this.postsService.findOne(id)
+			const post = await this.postsService.findOne(id,parseInt(idUser))
 			return res.status(200).json({
 				code: 200,
 				post: post

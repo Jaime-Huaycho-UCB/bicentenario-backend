@@ -10,6 +10,7 @@ import { Comment } from "../../comment-modules/comments/entities/comment.entity"
 import { PostInteraction } from "../../post-interactions/entities/post-interaction.entity";
 import { PostStar } from "../../post-stars/entities/post-star.entity";
 import { FolderPost } from "src/modules/user-modules/folder-modules/folder-posts/entities/folder-post.entity";
+import { UserHistory } from "src/modules/user-modules/user-histories/entities/user-history.entity";
 
 @Entity('posts')
 export class Post {
@@ -108,4 +109,7 @@ export class Post {
 
     @OneToMany(() => FolderPost,(fp) => fp.post)
     folderPosts: FolderPost[]
+
+    @OneToMany(() => UserHistory,(history) => history.post)
+    userHistories: UserHistory[]
 }

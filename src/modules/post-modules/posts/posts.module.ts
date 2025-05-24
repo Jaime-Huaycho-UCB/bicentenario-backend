@@ -14,6 +14,7 @@ import { PostTagsModule } from '../tag-modules/post-tags/post-tags.module';
 import { TagsModule } from '../tag-modules/tags/tags.module';
 import { PostInteractionsModule } from '../post-interactions/post-interactions.module';
 import { PostStarsModule } from '../post-stars/post-stars.module';
+import { UserHistoriesModule } from 'src/modules/user-modules/user-histories/user-histories.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { PostStarsModule } from '../post-stars/post-stars.module';
     TagsModule,
     forwardRef(() => PostInteractionsModule),
     forwardRef(() => PostStarsModule),
+    forwardRef(() => UserHistoriesModule)
   ],
   controllers: [PostsController],
   providers: [PostsService,PostsValidator],

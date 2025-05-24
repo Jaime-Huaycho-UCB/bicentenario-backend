@@ -6,6 +6,7 @@ import { PostInteraction } from "src/modules/post-modules/post-interactions/enti
 import { PostStar } from "src/modules/post-modules/post-stars/entities/post-star.entity"
 import { CommentInteraction } from "src/modules/post-modules/comment-modules/comment-interactions/entities/comment-interaction.entity"
 import { UserFolder } from "../../folder-modules/user-folders/entities/user-folder.entity"
+import { UserHistory } from "../../user-histories/entities/user-history.entity"
 
 @Entity('users')
 export class User {
@@ -60,4 +61,7 @@ export class User {
 
     @OneToMany(() => UserFolder,(folder) => folder.user)
     folders: UserFolder[]
+
+    @OneToMany(() => UserHistory,(history) => history.user)
+    histories: UserHistory[]
 }
