@@ -10,5 +10,6 @@ import { Rol } from './entities/rol.entity';
 	],
 	controllers: [RolsController],
 	providers: [RolsService],
+	exports: [RolsService]
 })
 export class RolsModule { }

@@ -8,13 +8,15 @@ import { UsersService } from "./services/users.service";
 import { UsersController } from "./users.controller";
 import { UsersValidator } from "./services/users.validator";
 import { ConfigModule } from "src/config/config.module";
+import { RolsModule } from "../rols/rols.module";
 
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([User]),
         JwtModule,
-        ConfigModule
+        ConfigModule,
+        RolsModule
     ],
     providers: [UsersService,UserAuthService,HashService,UsersValidator],
     controllers: [UsersController],

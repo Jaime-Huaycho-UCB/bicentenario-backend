@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, Timestamp, Entity, OneToMany } from "typeorm"
+import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, Timestamp, Entity, OneToMany, OneToOne } from "typeorm"
 import { Rol } from "../../rols/entities/rol.entity"
 import { Post } from "src/modules/post-modules/posts/entities/post.entity"
 import { Comment } from "src/modules/post-modules/comment-modules/comments/entities/comment.entity"
@@ -7,6 +7,7 @@ import { PostStar } from "src/modules/post-modules/post-stars/entities/post-star
 import { CommentInteraction } from "src/modules/post-modules/comment-modules/comment-interactions/entities/comment-interaction.entity"
 import { UserFolder } from "../../folder-modules/user-folders/entities/user-folder.entity"
 import { UserHistory } from "../../user-histories/entities/user-history.entity"
+import { ResearcherApplication } from "../../researcher-applications/entities/researcher-application.entity"
 
 @Entity('users')
 export class User {
@@ -64,4 +65,7 @@ export class User {
 
     @OneToMany(() => UserHistory,(history) => history.user)
     histories: UserHistory[]
+
+    @OneToOne(() => ResearcherApplication,(application) => application.user)
+    researcherApplication: ResearcherApplication
 }

@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/user-modules/users/users.module';
 import { RolsModule } from './modules/user-modules/rols/rols.module';
-import { RequestsInvestigatorModule } from './modules/user-modules/requests-investigator/requests-investigator.module';
 import { DownloadUsersModule } from './modules/user-modules/download-users/download-users.module';
 import { FolderPostsModule } from './modules/user-modules/folder-modules/folder-posts/folder-posts.module';
 import { ComplaintStatusesModule } from './modules/complaint-modules/complaint-statuses/complaint-statuses.module';
@@ -37,6 +36,7 @@ import { ObjectsComplaintsModule } from './modules/complaint-modules/objects-com
 import { PostStarsModule } from './modules/post-modules/post-stars/post-stars.module';
 import { UserFoldersModule } from './modules/user-modules/folder-modules/user-folders/user-folders.module';
 import { UserHistoriesModule } from './modules/user-modules/user-histories/user-histories.module';
+import { ResearcherApplicationsModule } from './modules/user-modules/researcher-applications/researcher-applications.module';
 @Module({
   imports: [
     ConfigModule,
@@ -44,7 +44,6 @@ import { UserHistoriesModule } from './modules/user-modules/user-histories/user-
     AuthModule,
     UsersModule,
     RolsModule,
-    RequestsInvestigatorModule,
     DownloadUsersModule,
     FolderPostsModule,
     ComplaintStatusesModule,
@@ -73,7 +72,8 @@ import { UserHistoriesModule } from './modules/user-modules/user-histories/user-
     StorageModule,
     PostStarsModule,
     UserFoldersModule,
-    UserHistoriesModule
+    UserHistoriesModule,
+    ResearcherApplicationsModule
   ],
   controllers: [AppController],
   providers: [AppService],

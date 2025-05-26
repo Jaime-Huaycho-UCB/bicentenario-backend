@@ -4,13 +4,15 @@ import { Repository } from "typeorm";
 import { User } from "../entities/user.entity";
 import { UsersValidator } from "./users.validator";
 import { DtoInEditUser } from "../dto/edit-user";
+import { RolsService } from "../../rols/rols.service";
 
 @Injectable()
 export class UsersService {
 	constructor(
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>,
-		private readonly usersValidator: UsersValidator
+		private readonly usersValidator: UsersValidator,
+		private readonly rolsService: RolsService
 	) { }
 
 	async getAUser(email: string, showPass = false) {
@@ -106,5 +108,13 @@ export class UsersService {
 		await this.userRepository.save(user!);
 
 		return true;
+	}
+
+	async changeRol(idUser: number, idRol: number) {
+		const rol = await this.rolsService.findOne(idRol);
+		const user = await this.getAUserById(idUser);
+		user!.rol = rol!;
+		const userUpdated = await this.userRepository.save(user!);
+		return userUpdated;
 	}
 }

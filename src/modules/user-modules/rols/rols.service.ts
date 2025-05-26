@@ -18,8 +18,13 @@ export class RolsService {
 		return rols;
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} rol`;
+	async findOne(idRol: number) {
+		const rol = await this.rolRepository.findOne({
+			where: {
+				id: idRol
+			}
+		})
+		return rol;
 	}
 
 	update(id: number, updateRolDto: UpdateRolDto) {

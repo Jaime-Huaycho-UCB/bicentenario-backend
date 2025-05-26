@@ -32,8 +32,8 @@ END $$;
 -- user-folders
 \i user-modules/folder-modules/user-folders/create-table-user-folders.sql
 
--- investigator-requests
-\i user-modules/investigator-requests/create-table-investigator-requests.sql
+-- researcher-applications
+\i user-modules/researcher-applications/create-table-researcher-applications.sql
 
 -- post-statues
 \i post-modules/post-statuses/create-table-post-statuses.sql
