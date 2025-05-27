@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Res, Put, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Res, Put, Query, Delete } from '@nestjs/common';
 import { EventsService } from './services/events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -110,6 +110,28 @@ export class EventsController {
 			return res.status(200).json({
 				code: 200,
 				message: response
+			})
+		} catch (error) {
+			return responseError(error,res);
+		}
+	}
+
+	@Delete(':idEvent')
+	@ApiOperation({summary: 'Api para eliminar eventos'})
+	@ApiParam({ name: 'idEvent', required: true, description: 'Id del evento a eliminar' })
+	@ApiResponse({
+		description: 'Salida en cado de eliminar exitosamente el evento',
+		status: 200,
+		type: DtoResponse
+	})
+	@ApiResponse(swaggerRes400())
+	@ApiResponse(swaggerRes404())
+	async remove(@Param('idEvent') id: string,@Res() res: Response) {
+		try {
+			const eventUpdated = await this.eventsService.remove(parseInt(id));
+			return res.status(200).json({
+				code: 200,
+				message: 'El evento se elimino exitosamente'
 			})
 		} catch (error) {
 			return responseError(error,res);

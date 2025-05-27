@@ -21,6 +21,9 @@ export class Event {
     @JoinColumn({name: 'id_city'})
     city: City
 
+    @Column({name: 'is_deleted'})
+    isDeleted: boolean
+
     @CreateDateColumn({name: 'created_at'})
     createdAt: Timestamp
 

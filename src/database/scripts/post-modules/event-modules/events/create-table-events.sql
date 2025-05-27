@@ -5,6 +5,7 @@ create table events (
     id_file bigint,
     content varchar(2000) not null,
     id_city int not null,
+    is_deleted boolean default false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key (id_event),
     Foreign Key (id_file) REFERENCES files(id_file) on delete cascade,

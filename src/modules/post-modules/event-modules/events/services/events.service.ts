@@ -45,6 +45,7 @@ export class EventsService {
 		const skip = (page - 1) * limit;
 		const [events,total] = await this.eventRepository.findAndCount({
 			where: {
+				isDeleted: false,
 				...(filters.search ? {
 					title: Like(`%${filters.search.trim()}%`)
 				}:{})
@@ -83,6 +84,7 @@ export class EventsService {
 		this.eventsValidator.validateId(id);
 		const event = await this.eventRepository.findOne({
 			where: {
+				isDeleted: false,
 				id: id
 			},
 			relations: {
@@ -112,5 +114,11 @@ export class EventsService {
 		}
 		await this.eventRepository.save(event!);
 		return 'Se actualizo exitosamente el evento';
+	}
+	async remove(idEvent: number){
+		const event = await this.findOne(idEvent);
+		event!.isDeleted = true;
+		const eventUpdated = await this.eventRepository.save(event!);
+		return eventUpdated
 	}
 }
