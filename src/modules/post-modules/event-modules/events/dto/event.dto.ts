@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { FileDto } from "src/modules/files/dto/file.dto";
 import { CityWithDepartamentDto } from "src/modules/location-modules/cities/dto/city.dto";
 
 export class EventDto {
@@ -13,6 +14,9 @@ export class EventDto {
 
     @ApiProperty({description: 'Contenido escrito del evento',type: String,nullable: false})
     content: string
+
+    @ApiProperty({description: 'Datos de la imagen del evento',type: FileDto,nullable: true})
+    filea: FileDto
 
     @ApiProperty({description: 'Ciudad del evento',type: CityWithDepartamentDto,nullable: false})
     city: CityWithDepartamentDto
