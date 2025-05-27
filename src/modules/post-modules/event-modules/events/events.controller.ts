@@ -4,7 +4,7 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Response } from 'express';
 import { responseError } from 'src/common/helpers/out.helper';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetEventsDto, GetOneEventDto } from './dto/get-events.dto';
 import { DtoResponse, swaggerRes400, swaggerRes404 } from 'src/common/helpers/classes.dto';
 
@@ -36,6 +36,10 @@ export class EventsController {
 
 	@Get()
 	@ApiOperation({summary: 'Api para obtener todo s los eventos'})
+	@ApiQuery({name: 'search',required: false})
+	@ApiQuery({name: 'page',required: false})
+	@ApiQuery({name: 'limit',required: false})
+	@ApiQuery({name: 'createdAt',required: false,enum: ['DESC','ASC']})
 	@ApiResponse({
 		description: 'Salida en caso de obtener todo los eventos',
 		status: 200,
@@ -45,12 +49,15 @@ export class EventsController {
 	async findAll(
 		@Query('page') page: string,
 		@Query('limit') limit: string,
+		@Query('search') search: string,
+		@Query('createdAt') createdAt: string,
 		@Res() res: Response
 	) {
 		try {
 			const response = await this.eventsService.findAll({
 				page: parseInt(page),
-				limit: parseInt(limit)
+				limit: parseInt(limit),
+				search: search
 			});
 			return res.status(200).json({
 				code: 200,

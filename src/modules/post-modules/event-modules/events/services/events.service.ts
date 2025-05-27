@@ -3,10 +3,11 @@ import { CreateEventDto } from '../dto/create-event.dto';
 import { UpdateEventDto } from '../dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from '../entities/event.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CitiesService } from 'src/modules/location-modules/cities/services/cities.service';
 import { EventsValidator } from './events.validator';
 import { FilesService } from 'src/modules/files/services/files.service';
+import { title } from 'process';
 
 @Injectable()
 export class EventsService {
@@ -34,13 +35,20 @@ export class EventsService {
 	}
 
 	async findAll(filters: {
+		search?: string,
 		page?: number,
-		limit?: number
+		limit?: number,
+		createdAt?: string
 	} = {}) {
 		const page = isNaN(Number(filters.page)) ? 1 : Number(filters.page);
 		const limit = isNaN(Number(filters.limit)) ? 10 : Number(filters.limit);
 		const skip = (page - 1) * limit;
 		const [events,total] = await this.eventRepository.findAndCount({
+			where: {
+				...(filters.search ? {
+					title: Like(`%${filters.search.trim()}%`)
+				}:{})
+			},
 			relations: {
 				city: {
 					departament: true
@@ -48,7 +56,11 @@ export class EventsService {
 				file: true
 			},
 			order: {
-				createdAt: 'DESC'
+				...(filters.createdAt ? {
+					createdAt: (filters.createdAt === 'ASC' ? 'ASC' : 'DESC')
+				}:{
+					createdAt: 'DESC'
+				})
 			},
 			skip: skip,
 			take: limit
