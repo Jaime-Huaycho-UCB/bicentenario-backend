@@ -44,7 +44,8 @@ export class EventsService {
 			relations: {
 				city: {
 					departament: true
-				}
+				},
+				file: true
 			},
 			order: {
 				createdAt: 'DESC'
@@ -75,7 +76,8 @@ export class EventsService {
 			relations: {
 				city: {
 					departament: filters.relations.city
-				}
+				},
+				file: true
 			}
 		});
 		this.eventsValidator.validateEvent(event);
