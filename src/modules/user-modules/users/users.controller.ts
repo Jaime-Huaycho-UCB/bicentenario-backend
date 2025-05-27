@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Res, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiOperation, ApiHeader, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiOperation, ApiHeader, ApiResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { headerAuth } from 'src/modules/auth/auth.util';
 import { AuthGuard } from 'src/modules/auth/services/auth.guard';
 import { swaggerRes500, DtoResponse, swaggerRes404 } from 'src/common/helpers/classes.dto';
@@ -10,6 +10,7 @@ import { UsersService } from './services/users.service';
 import { Response } from 'express';
 import { DtoOutGetUsers, GetOneUserDto } from './dto/get-user.dto';
 
+@ApiTags('Usuarios')
 @Controller('users')
 export class UsersController {
 	constructor(private readonly usersService: UsersService) { }

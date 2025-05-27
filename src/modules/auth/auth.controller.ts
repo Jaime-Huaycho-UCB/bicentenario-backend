@@ -1,13 +1,14 @@
 import { Body, Controller, Post, Put, Res } from "@nestjs/common";
 import { AuthService } from "./services/auth.service";
 import { Response } from "express";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { DtoInChangePassword, DtoInLogin, DtoInRegisterUser, DtoInRestorePassword } from "./DTOs/auth-in.dto";
 import { DtoOutLogin, DtoOutRegisterUser, DtoOutRestorePassword } from "./DTOs/auth.out.dto";
 import { DtoResponse, swaggerRes500 } from "src/common/helpers/classes.dto";
 import { responseError } from "src/common/helpers/out.helper";
 import { UserAuthService } from "../user-modules/users/services/users-auth.service";
 
+@ApiTags('Autenticacion')
 @Controller('auth')
 export class AuthController {
     constructor(

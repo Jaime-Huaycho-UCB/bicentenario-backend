@@ -4,10 +4,11 @@ import { CreateComplaintDto } from './dto/create-complaint.dto';
 import { UpdateComplaintDto } from './dto/update-complaint.dto';
 import { Response } from 'express';
 import { responseError } from 'src/common/helpers/out.helper';
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetComplaintsDto } from './dto/get-complaints.dto';
 import { DtoResponse, swaggerRes404, swaggerRes500 } from 'src/common/helpers/classes.dto';
 
+@ApiTags('Denuncias de contenido')
 @Controller('complaints')
 export class ComplaintsController {
 	constructor(private readonly complaintsService: ComplaintsService) { }

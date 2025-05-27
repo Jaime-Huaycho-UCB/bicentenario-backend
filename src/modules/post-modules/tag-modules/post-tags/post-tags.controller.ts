@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PostTagsService } from './post-tags.service';
 import { CreatePostTagDto } from './dto/create-post-tag.dto';
 import { UpdatePostTagDto } from './dto/update-post-tag.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController(true)
 @Controller('post-tags')
 export class PostTagsController {
   constructor(private readonly postTagsService: PostTagsService) {}

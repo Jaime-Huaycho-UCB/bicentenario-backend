@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PostStatusesService } from './services/post-statuses.service';
 import { CreatePostStatusDto } from './dto/create-post-status.dto';
 import { UpdatePostStatusDto } from './dto/update-post-status.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Estados de testimonio')
 @Controller('post-statuses')
 export class PostStatusesController {
   constructor(private readonly postStatusesService: PostStatusesService) {}

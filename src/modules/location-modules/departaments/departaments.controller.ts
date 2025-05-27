@@ -4,9 +4,10 @@ import { CreateDepartamentDto } from './dto/create-departament.dto';
 import { UpdateDepartamentDto } from './dto/update-departament.dto';
 import { Response } from 'express';
 import { responseError } from 'src/common/helpers/out.helper';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetDepartamentsDto } from './dto/get-departament.dto';
 
+@ApiTags('Departamentos')
 @Controller('departaments')
 export class DepartamentsController {
 	constructor(private readonly departamentsService: DepartamentsService) { }

@@ -4,10 +4,11 @@ import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { Response } from 'express';
 import { responseError } from 'src/common/helpers/out.helper';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetTagsDto } from './dto/get-tags.dto';
 import { swaggerRes404 } from 'src/common/helpers/classes.dto';
 
+@ApiTags('Etiquetas de testimonios')
 @Controller('tags')
 export class TagsController {
 	constructor(private readonly tagsService: TagsService) { }

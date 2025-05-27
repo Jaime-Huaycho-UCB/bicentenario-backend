@@ -4,10 +4,11 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Response } from 'express';
 import { responseError } from 'src/common/helpers/out.helper';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetEventsDto, GetOneEventDto } from './dto/get-events.dto';
 import { DtoResponse, swaggerRes400, swaggerRes404 } from 'src/common/helpers/classes.dto';
 
+@ApiTags('Eventos')
 @Controller('events')
 export class EventsController {
 	constructor(private readonly eventsService: EventsService) { }
