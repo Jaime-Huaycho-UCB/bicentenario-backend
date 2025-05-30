@@ -230,9 +230,19 @@ export class PostsService {
 		this.postsValidator.validatePost(post);
 		if (!isNaN(idUser)){
 			const user = await this.usersService.getAUserById(idUser);
+			await this.createView(user!.id,post!);
 			const history = await this.userHistoriesService.create({idPost: post!.id,idUser: idUser}, post, user);
 		}
 		return post;
+	}
+
+	async createView(idUser: number,post: Post){
+		try {
+			const history = await this.userHistoriesService.findAll(idUser);
+		} catch (error) {
+			post!.views = post!.views + 1;
+			await this.postRepository.save(post!);
+		}
 	}
 
 	async findOneAll(id: number, { user = false, city = false, file = false, tags = false, status = false, event = false, curator = false } = {}) {
