@@ -9,6 +9,7 @@ import { MyConfigService } from "src/config/config.service";
 import { EmailModule } from "src/micro-services/email/email.module";
 import { UsersModule } from "../user-modules/users/users.module";
 import { HashService } from "src/common/helpers/hash.helper";
+import { RolsGuardModule } from "../user-modules/rols/rols-decorator/rols-guard.module";
 
 @Global()
 @Module({
@@ -32,6 +33,7 @@ import { HashService } from "src/common/helpers/hash.helper";
         }),
         UsersModule,
         EmailModule,
+        RolsGuardModule
     ],
     providers: [AuthService, AuthGuard, AuthValidator,HashService],
     controllers: [AuthController],
