@@ -9,6 +9,7 @@ import { UserFolder } from "../../folder-modules/user-folders/entities/user-fold
 import { UserHistory } from "../../user-histories/entities/user-history.entity"
 import { ResearcherApplication } from "../../researcher-applications/entities/researcher-application.entity"
 import { PostForum } from "src/modules/post-modules/forum-modules/post-forums/entities/post-forum.entity"
+import { PostForumMessage } from "src/modules/post-modules/forum-modules/post-forum-messages/entities/post-forum-message.entity"
 
 @Entity('users')
 export class User {
@@ -72,4 +73,7 @@ export class User {
 
     @OneToMany(() => PostForum,(forum) => forum.user)
     postForums: PostForum[]
+
+    @OneToMany(() => PostForumMessage,(postForum) => postForum.user)
+    postForumMessages: PostForumMessage[]
 }
