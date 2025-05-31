@@ -39,29 +39,29 @@ import { UserHistoriesModule } from './modules/user-modules/user-histories/user-
 import { ResearcherApplicationsModule } from './modules/user-modules/researcher-applications/researcher-applications.module';
 @Module({
   imports: [
-    ConfigModule,
-    DatabaseModule,
-    AuthModule,
-    UsersModule,
-    RolsModule,
+    ConfigModule, // listo
+    DatabaseModule, // listo
+    AuthModule, // listo
+    UsersModule, // listo
+    RolsModule, // listo
     DownloadUsersModule,
-    FolderPostsModule,
-    ComplaintStatusesModule,
-    ComplaintsModule,
-    ObjectsComplaintsModule,
-    DepartamentsModule,
-    CitiesModule,
-    FilesModule,
+    FolderPostsModule, // listo
+    ComplaintStatusesModule, // listo
+    ComplaintsModule, // listo
+    ObjectsComplaintsModule, // listo
+    DepartamentsModule, // listo
+    CitiesModule, // listo
+    FilesModule, // listo
     LogsModule,
-    PostsModule,
-    PostStatusesModule,
-    PostTagsModule,
-    PostInteractionsModule,
-    CommentsModule,
-    CommentInteractionsModule,
-    TagsModule,
-    PostForumsModule,
-    PostForumMessagesModule,
+    PostsModule, // listo
+    PostStatusesModule, // listo
+    PostTagsModule, // listo
+    PostInteractionsModule, // listo
+    CommentsModule, // listo
+    CommentInteractionsModule, // listo
+    TagsModule, // listo
+    PostForumsModule, // listo
+    PostForumMessagesModule, // listo
     EventsModule,
     EventForumsModule,
     EventForumMessagesModule,
@@ -69,37 +69,37 @@ import { ResearcherApplicationsModule } from './modules/user-modules/researcher-
     SurveysAnsweredModule,
     QuestionsModule,
     QuestionAnswersModule,
-    StorageModule,
-    PostStarsModule,
-    UserFoldersModule,
-    UserHistoriesModule,
-    ResearcherApplicationsModule
+    StorageModule, // listo
+    PostStarsModule, // listo
+    UserFoldersModule, // listo
+    UserHistoriesModule, // listo
+    ResearcherApplicationsModule // listo
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule implements OnModuleInit{
-  constructor(private readonly config: MyConfigService) {}
+export class AppModule implements OnModuleInit {
+  constructor(private readonly config: MyConfigService) { }
   onModuleInit() {
     console.log('✅ PORT:', this.config.get('PORT'));
-  console.log('✅ LOGS:', this.config.get('LOGS'));
+    console.log('✅ LOGS:', this.config.get('LOGS'));
 
-  console.log('🗄️ DB_HOST:', this.config.get('DB_HOST'));
-  console.log('🗄️ DB_PORT:', this.config.get('DB_PORT'));
-  console.log('🗄️ DB_USER:', this.config.get('DB_USER'));
-  console.log('🗄️ DB_PASSWORD:', this.config.get('DB_PASSWORD'));
-  console.log('🗄️ DB_NAME:', this.config.get('DB_NAME'));
+    console.log('🗄️ DB_HOST:', this.config.get('DB_HOST'));
+    console.log('🗄️ DB_PORT:', this.config.get('DB_PORT'));
+    console.log('🗄️ DB_USER:', this.config.get('DB_USER'));
+    console.log('🗄️ DB_PASSWORD:', this.config.get('DB_PASSWORD'));
+    console.log('🗄️ DB_NAME:', this.config.get('DB_NAME'));
 
-  console.log('📧 USER_EMAIL:', this.config.get('USER_EMAIL'));
-  console.log('📧 PASS_AUTH:', this.config.get('PASS_AUTH'));
+    console.log('📧 USER_EMAIL:', this.config.get('USER_EMAIL'));
+    console.log('📧 PASS_AUTH:', this.config.get('PASS_AUTH'));
 
-  console.log('🔐 JWT_SECRET:', this.config.get('JWT_SECRET'));
-  console.log('🔐 JWT_TIME_EXPIRE:', this.config.get('JWT_TIME_EXPIRE'));
+    console.log('🔐 JWT_SECRET:', this.config.get('JWT_SECRET'));
+    console.log('🔐 JWT_TIME_EXPIRE:', this.config.get('JWT_TIME_EXPIRE'));
 
-  console.log('📁 FILE_SYSTEM_HOST:', this.config.get('FILE_SYSTEM_HOST'));
-  console.log('🧾 PDF_SERVICE_URL:', this.config.get('PDF_SERVICE_URL'));
+    console.log('📁 FILE_SYSTEM_HOST:', this.config.get('FILE_SYSTEM_HOST'));
+    console.log('🧾 PDF_SERVICE_URL:', this.config.get('PDF_SERVICE_URL'));
 
-  console.log('🔑 GOOGLE_CLIENT_ID:', this.config.get('GOOGLE_CLIENT_ID'));
-  console.log('🔑 GOOGLE_CLIENT_SECRET:', this.config.get('GOOGLE_CLIENT_SECRET'));
+    console.log('🔑 GOOGLE_CLIENT_ID:', this.config.get('GOOGLE_CLIENT_ID'));
+    console.log('🔑 GOOGLE_CLIENT_SECRET:', this.config.get('GOOGLE_CLIENT_SECRET'));
   }
 }
