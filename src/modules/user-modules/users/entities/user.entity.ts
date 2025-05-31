@@ -8,6 +8,7 @@ import { CommentInteraction } from "src/modules/post-modules/comment-modules/com
 import { UserFolder } from "../../folder-modules/user-folders/entities/user-folder.entity"
 import { UserHistory } from "../../user-histories/entities/user-history.entity"
 import { ResearcherApplication } from "../../researcher-applications/entities/researcher-application.entity"
+import { PostForum } from "src/modules/post-modules/forum-modules/post-forums/entities/post-forum.entity"
 
 @Entity('users')
 export class User {
@@ -68,4 +69,7 @@ export class User {
 
     @OneToOne(() => ResearcherApplication,(application) => application.user)
     researcherApplication: ResearcherApplication
+
+    @OneToMany(() => PostForum,(forum) => forum.user)
+    postForums: PostForum[]
 }
