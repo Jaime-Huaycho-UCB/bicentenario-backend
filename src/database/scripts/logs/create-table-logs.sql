@@ -1,6 +1,6 @@
 create table logs (
     id_log bigserial,
-    event varchar(100),
+    event int not null,
     description varchar(300) not null,
     id_user bigint not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

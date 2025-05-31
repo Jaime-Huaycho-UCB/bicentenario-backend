@@ -10,6 +10,7 @@ import { UserHistory } from "../../user-histories/entities/user-history.entity"
 import { ResearcherApplication } from "../../researcher-applications/entities/researcher-application.entity"
 import { PostForum } from "src/modules/post-modules/forum-modules/post-forums/entities/post-forum.entity"
 import { PostForumMessage } from "src/modules/post-modules/forum-modules/post-forum-messages/entities/post-forum-message.entity"
+import { Log } from "src/modules/logs/entities/log.entity"
 
 @Entity('users')
 export class User {
@@ -76,4 +77,7 @@ export class User {
 
     @OneToMany(() => PostForumMessage,(postForum) => postForum.user)
     postForumMessages: PostForumMessage[]
+
+    @OneToMany(() => Log,(log) => log.user)
+    logs: Log[]
 }
