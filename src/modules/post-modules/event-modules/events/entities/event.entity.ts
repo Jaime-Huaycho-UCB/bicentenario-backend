@@ -2,6 +2,7 @@ import { File } from "src/modules/files/entities/files.entity";
 import { City } from "src/modules/location-modules/cities/entities/city.entity";
 import { Post } from "src/modules/post-modules/posts/entities/post.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { EventForum } from "../../event-forums/entities/event-forum.entity";
 
 @Entity('events')
 export class Event {
@@ -33,4 +34,7 @@ export class Event {
     @OneToOne(() => File,(file) => file.event)
     @JoinColumn({name: 'id_file'})
     file: File
+
+    @OneToMany(() => EventForum,(forum) => forum.event)
+    forums: EventForum
 }

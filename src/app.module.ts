@@ -62,7 +62,7 @@ import { UserDownloadsModule } from './modules/user-modules/user-downloads/user-
     PostForumsModule, // listo
     PostForumMessagesModule, // listo
     EventsModule,// listo
-    EventForumsModule,
+    EventForumsModule,// listo
     EventForumMessagesModule,
     SurveysModule,
     SurveysAnsweredModule,
