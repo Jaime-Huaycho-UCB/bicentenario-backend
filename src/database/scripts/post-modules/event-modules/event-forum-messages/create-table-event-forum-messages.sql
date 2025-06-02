@@ -1,4 +1,4 @@
-create table event_forum_message (
+create table event_forum_messages (
     id_message bigserial,
     id_forum bigint not null,
     id_user bigint not null,

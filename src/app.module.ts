@@ -20,7 +20,6 @@ import { PostForumsModule } from './modules/post-modules/forum-modules/post-foru
 import { PostForumMessagesModule } from './modules/post-modules/forum-modules/post-forum-messages/post-forum-messages.module';
 import { EventsModule } from './modules/post-modules/event-modules/events/events.module';
 import { EventForumsModule } from './modules/post-modules/event-modules/event-forums/event-forums.module';
-import { EventForumMessagesModule } from './modules/post-modules/event-modules/event-forum_messages/event-forum_messages.module';
 import { SurveysModule } from './modules/survey-modules/surveys/surveys.module';
 import { SurveysAnsweredModule } from './modules/survey-modules/surveys-answered/surveys-answered.module';
 import { QuestionsModule } from './modules/survey-modules/question-modules/questions/questions.module';
@@ -37,6 +36,7 @@ import { UserFoldersModule } from './modules/user-modules/folder-modules/user-fo
 import { UserHistoriesModule } from './modules/user-modules/user-histories/user-histories.module';
 import { ResearcherApplicationsModule } from './modules/user-modules/researcher-applications/researcher-applications.module';
 import { UserDownloadsModule } from './modules/user-modules/user-downloads/user-downloads.module';
+import { EventForumMessagesModule } from './modules/post-modules/event-modules/event-forum-messages/event-forum-messages.module';
 @Module({
   imports: [
     ConfigModule, // listo
@@ -63,7 +63,7 @@ import { UserDownloadsModule } from './modules/user-modules/user-downloads/user-
     PostForumMessagesModule, // listo
     EventsModule,// listo
     EventForumsModule,// listo
-    EventForumMessagesModule,
+    EventForumMessagesModule, // listo
     SurveysModule,
     SurveysAnsweredModule,
     QuestionsModule,

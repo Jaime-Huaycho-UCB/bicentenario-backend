@@ -1,6 +1,7 @@
 import { User } from "src/modules/user-modules/users/entities/user.entity"
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm"
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
 import { Event } from "../../events/entities/event.entity"
+import { EventForumMessage } from "../../event-forum-messages/entities/event-forum-message.entity"
 
 @Entity('event_forums')
 export class EventForum {
@@ -26,4 +27,7 @@ export class EventForum {
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamp without time zone' })
     createdAt: Timestamp
+
+    @OneToMany(() => EventForumMessage,(eventForumMessage) => eventForumMessage.forum)
+    messages: EventForumMessage[]
 }
