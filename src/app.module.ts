@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/user-modules/users/users.module';
 import { RolsModule } from './modules/user-modules/rols/rols.module';
-import { DownloadUsersModule } from './modules/user-modules/download-users/download-users.module';
 import { FolderPostsModule } from './modules/user-modules/folder-modules/folder-posts/folder-posts.module';
 import { ComplaintStatusesModule } from './modules/complaint-modules/complaint-statuses/complaint-statuses.module';
 import { DepartamentsModule } from './modules/location-modules/departaments/departaments.module';
@@ -37,6 +36,7 @@ import { PostStarsModule } from './modules/post-modules/post-stars/post-stars.mo
 import { UserFoldersModule } from './modules/user-modules/folder-modules/user-folders/user-folders.module';
 import { UserHistoriesModule } from './modules/user-modules/user-histories/user-histories.module';
 import { ResearcherApplicationsModule } from './modules/user-modules/researcher-applications/researcher-applications.module';
+import { UserDownloadsModule } from './modules/user-modules/user-downloads/user-downloads.module';
 @Module({
   imports: [
     ConfigModule, // listo
@@ -44,7 +44,6 @@ import { ResearcherApplicationsModule } from './modules/user-modules/researcher-
     AuthModule, // listo
     UsersModule, // listo
     RolsModule, // listo
-    DownloadUsersModule,
     FolderPostsModule, // listo
     ComplaintStatusesModule, // listo
     ComplaintsModule, // listo
@@ -73,7 +72,8 @@ import { ResearcherApplicationsModule } from './modules/user-modules/researcher-
     PostStarsModule, // listo
     UserFoldersModule, // listo
     UserHistoriesModule, // listo
-    ResearcherApplicationsModule // listo
+    ResearcherApplicationsModule, // listo
+    UserDownloadsModule, // listo
   ],
   controllers: [AppController],
   providers: [AppService],

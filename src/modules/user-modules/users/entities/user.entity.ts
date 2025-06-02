@@ -11,6 +11,7 @@ import { ResearcherApplication } from "../../researcher-applications/entities/re
 import { PostForum } from "src/modules/post-modules/forum-modules/post-forums/entities/post-forum.entity"
 import { PostForumMessage } from "src/modules/post-modules/forum-modules/post-forum-messages/entities/post-forum-message.entity"
 import { Log } from "src/modules/logs/entities/log.entity"
+import { UserDownload } from "../../user-downloads/entities/user-download.entity"
 
 @Entity('users')
 export class User {
@@ -80,4 +81,7 @@ export class User {
 
     @OneToMany(() => Log,(log) => log.user)
     logs: Log[]
+
+    @OneToMany(() => UserDownload,(download) => download.user)
+    downloads: UserDownload[]
 }
