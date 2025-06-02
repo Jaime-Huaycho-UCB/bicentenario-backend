@@ -38,10 +38,10 @@ export class UsersController {
 		}
 	}
 
-	@UseGuards(AuthGuard)
+	// @UseGuards(AuthGuard)
 	@Put()
 	@ApiOperation({ summary: 'Api para editar informacion de un usuario' })
-	@ApiHeader(headerAuth())
+	// @ApiHeader(headerAuth())
 	@ApiResponse({
 		description: 'Respuesta en caso de edicion exitosa',
 		status: 200,
@@ -66,10 +66,10 @@ export class UsersController {
 		}
 	}
 
-	@UseGuards(AuthGuard)
+	// @UseGuards(AuthGuard)
 	@Delete('/:id')
 	@ApiOperation({ summary: 'Api para eliminar un usuario de forma logica' })
-	@ApiHeader(headerAuth())
+	// @ApiHeader(headerAuth())
 	@ApiParam({ name: 'id', required: true, description: 'Id del usuario a eliminar' })
 	@ApiResponse({
 		description: 'Respuesta en caso de que se elimino exitosamente',
