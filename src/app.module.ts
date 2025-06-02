@@ -22,7 +22,6 @@ import { EventsModule } from './modules/post-modules/event-modules/events/events
 import { EventForumsModule } from './modules/post-modules/event-modules/event-forums/event-forums.module';
 import { SurveysModule } from './modules/survey-modules/surveys/surveys.module';
 import { SurveysAnsweredModule } from './modules/survey-modules/surveys-answered/surveys-answered.module';
-import { QuestionsModule } from './modules/survey-modules/question-modules/questions/questions.module';
 import { QuestionAnswersModule } from './modules/survey-modules/question-modules/question-answers/question-answers.module';
 import { ConfigModule } from './config/config.module';
 import { MyConfigService } from './config/config.service';
@@ -37,6 +36,7 @@ import { UserHistoriesModule } from './modules/user-modules/user-histories/user-
 import { ResearcherApplicationsModule } from './modules/user-modules/researcher-applications/researcher-applications.module';
 import { UserDownloadsModule } from './modules/user-modules/user-downloads/user-downloads.module';
 import { EventForumMessagesModule } from './modules/post-modules/event-modules/event-forum-messages/event-forum-messages.module';
+import { SurveyQuestionsModule } from './modules/survey-modules/question-modules/survey-questions/survey-questions.module';
 @Module({
   imports: [
     ConfigModule, // listo
@@ -66,7 +66,6 @@ import { EventForumMessagesModule } from './modules/post-modules/event-modules/e
     EventForumMessagesModule, // listo
     SurveysModule,
     SurveysAnsweredModule,
-    QuestionsModule,
     QuestionAnswersModule,
     StorageModule, // listo
     PostStarsModule, // listo
@@ -74,6 +73,7 @@ import { EventForumMessagesModule } from './modules/post-modules/event-modules/e
     UserHistoriesModule, // listo
     ResearcherApplicationsModule, // listo
     UserDownloadsModule, // listo
+    SurveyQuestionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
