@@ -52,7 +52,7 @@ import { ResearcherApplicationsModule } from './modules/user-modules/researcher-
     DepartamentsModule, // listo
     CitiesModule, // listo
     FilesModule, // listo
-    LogsModule,
+    LogsModule,// listo
     PostsModule, // listo
     PostStatusesModule, // listo
     PostTagsModule, // listo
@@ -62,7 +62,7 @@ import { ResearcherApplicationsModule } from './modules/user-modules/researcher-
     TagsModule, // listo
     PostForumsModule, // listo
     PostForumMessagesModule, // listo
-    EventsModule,
+    EventsModule,// listo
     EventForumsModule,
     EventForumMessagesModule,
     SurveysModule,
