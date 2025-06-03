@@ -33,4 +33,14 @@ export class SurveysService {
 		this.surveysValidator.validateSurveys(surveys);
 		return surveys;
 	}
+
+	async findOne(idSurvey: number){
+		this.surveysValidator.validateIdSurvey(idSurvey);
+		const survey = await this.surveyRepository.findOne({
+			where: {
+				id: idSurvey
+			}
+		})
+		return survey;
+	}
 }

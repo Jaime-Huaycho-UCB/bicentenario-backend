@@ -1,5 +1,6 @@
 import { Survey } from "src/modules/survey-modules/surveys/entities/survey.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { QuestionAnswer } from "../../question-answers/entities/question-answer.entity";
 
 @Entity('survey_questions')
 export class SurveyQuestion {
@@ -15,4 +16,8 @@ export class SurveyQuestion {
 
     @Column({ name: 'content' })
     content: string
+
+    @OneToMany(() => QuestionAnswer,(answer) => answer.question)
+    questionsAnswered: QuestionAnswer[]
 }
+``

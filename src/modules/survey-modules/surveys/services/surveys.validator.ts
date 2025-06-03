@@ -11,4 +11,10 @@ export class SurveysValidator extends Validator {
             throw new HttpException('No hay encuesta disponibles',this.NOT_FOUND)
         }
     }
+
+    validateIdSurvey(idSurvey: number){
+        if (isNaN(idSurvey)){
+            throw new HttpException('El parametro (idSurvey) es invalido',this.BAD_REQUEST)
+        }
+    }
 }

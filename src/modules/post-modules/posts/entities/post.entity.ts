@@ -13,6 +13,7 @@ import { FolderPost } from "src/modules/user-modules/folder-modules/folder-posts
 import { UserHistory } from "src/modules/user-modules/user-histories/entities/user-history.entity";
 import { PostForum } from "../../forum-modules/post-forums/entities/post-forum.entity";
 import { UserDownload } from "src/modules/user-modules/user-downloads/entities/user-download.entity";
+import { SurveysAnswered } from "src/modules/survey-modules/surveys-answered/entities/surveys-answered.entity";
 
 @Entity('posts')
 export class Post {
@@ -120,4 +121,7 @@ export class Post {
 
     @OneToMany(() => UserDownload,(download) => download.post)
     userDownloads: UserDownload[]
+
+    @OneToMany(() => SurveysAnswered,(answer) => answer.post)
+    surveysAnswered: SurveysAnswered[]
 }

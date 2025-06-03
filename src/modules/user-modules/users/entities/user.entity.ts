@@ -12,6 +12,7 @@ import { PostForum } from "src/modules/post-modules/forum-modules/post-forums/en
 import { PostForumMessage } from "src/modules/post-modules/forum-modules/post-forum-messages/entities/post-forum-message.entity"
 import { Log } from "src/modules/logs/entities/log.entity"
 import { UserDownload } from "../../user-downloads/entities/user-download.entity"
+import { SurveysAnswered } from "src/modules/survey-modules/surveys-answered/entities/surveys-answered.entity"
 
 @Entity('users')
 export class User {
@@ -84,4 +85,7 @@ export class User {
 
     @OneToMany(() => UserDownload,(download) => download.user)
     downloads: UserDownload[]
+
+    @OneToMany(() => SurveysAnswered,(answer) => answer.user)
+    surveysAnswered: SurveysAnswered[]
 }
