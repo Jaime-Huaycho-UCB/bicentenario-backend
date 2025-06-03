@@ -82,7 +82,7 @@ export class UsersService {
 	}
 
 	async editUser(data: DtoInEditUser) {
-		this.usersValidator.validateInEditUser(data);
+		// this.usersValidator.validateInEditUser(data);
 		const user = await this.userRepository.findOne({
 			where: {
 				id: data.id
