@@ -64,16 +64,16 @@ import { SurveyQuestionsModule } from './modules/survey-modules/question-modules
     EventsModule,// listo
     EventForumsModule,// listo
     EventForumMessagesModule, // listo
-    SurveysModule,
-    SurveysAnsweredModule,
-    QuestionAnswersModule,
+    SurveysModule, // listo
+    SurveysAnsweredModule, // listo
+    QuestionAnswersModule, // listo
     StorageModule, // listo
     PostStarsModule, // listo
     UserFoldersModule, // listo
     UserHistoriesModule, // listo
     ResearcherApplicationsModule, // listo
     UserDownloadsModule, // listo
-    SurveyQuestionsModule,
+    SurveyQuestionsModule, // listo
   ],
   controllers: [AppController],
   providers: [AppService],
