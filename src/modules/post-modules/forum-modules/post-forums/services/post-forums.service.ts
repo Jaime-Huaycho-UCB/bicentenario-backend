@@ -3,7 +3,7 @@ import { CreatePostForumDto } from '../dto/create-post-forum.dto';
 import { UpdatePostForumDto } from '../dto/update-post-forum.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostForum } from '../entities/post-forum.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { PostForumsValidator } from './post-forums.validator';
 import { UsersService } from 'src/modules/user-modules/users/services/users.service';
 import { PostsService } from 'src/modules/post-modules/posts/services/posts.service';
@@ -33,9 +33,16 @@ export class PostForumsService {
 
 	async findAll(filters: {
 		idUser?: number,
-		idPost?: number
+		idPost?: number,
+		search?: string,
+		page?: number,
+		limit?: number,
+		createdAt?: string
 	} = {}) {
-		const forums = await this.postForumRepository.find({
+		const page = isNaN(Number(filters.page)) ? 1 : Number(filters.page);
+		const limit = isNaN(Number(filters.limit)) ? 10 : Number(filters.limit);
+		const skip = (page - 1) * limit;
+		const [forums,total] = await this.postForumRepository.findAndCount({
 			where: {
 				isDeleted: false,
 				...(filters.idPost !== undefined && !isNaN(Number(filters.idPost)) ? {
@@ -47,6 +54,9 @@ export class PostForumsService {
 					user: {
 						id: filters.idUser
 					}
+				} : {}),
+				...(filters.search ? {
+					title: Like(`%${filters.search.trim()}%`)
 				} : {})
 			},
 			relations: {
@@ -61,10 +71,25 @@ export class PostForumsService {
 					id: true,
 					name: true
 				}
-			}
+			},
+			order: {
+				...(filters.createdAt ? {
+					createdAt: (filters.createdAt === 'ASC' ? 'ASC' : 'DESC')
+				}:{
+					createdAt: 'DESC'
+				})
+			},
+			skip: skip,
+			take: limit
 		})
 		this.postForumsValidator.validateForums(forums);
-		return forums;
+		return {
+			forums: forums,
+			total: total,
+			page: page,
+			limit: limit,
+			pages: Math.ceil(total / limit)
+		};
 	}
 
 	async findOne(idForum: number,relations: {

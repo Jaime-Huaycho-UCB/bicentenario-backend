@@ -38,9 +38,14 @@ export class PostForumsController {
 	}
 
 	// @UseGuards(AuthGuard)
-	@Get(':idPost')
+	@Get()
 	@ApiOperation({summary: 'Api para obtener los foros'})
+	@ApiQuery({name: 'idPost',description: 'Filtrar por testimonio',required: false})
 	@ApiQuery({name: 'idUser',description: 'Filtrar por usuario, util para obtener los foros creados por un usuario',required: false})
+	@ApiQuery({name: 'search',description: 'Para buscar por titulo',required: false})
+	@ApiQuery({name: 'page',description: 'Pagina',required: false})
+	@ApiQuery({name: 'limit',description: 'Lite de foros de retorno',required: false})
+	@ApiQuery({name: 'createdAt',description: 'Devolver por orden',required: false,enum: ['DESC','ASC']})
 	@ApiResponse({
 		description: 'Respuesta en caso de obtener los fotos exitosamente',
 		status: 200,
@@ -49,19 +54,27 @@ export class PostForumsController {
 	@ApiResponse(swaggerRes400())
 	@ApiResponse(swaggerRes401())
 	@ApiResponse(swaggerRes404())
-	async findAll(
-		@Param('idPost') idPost: string,
+	async findAllByPost(
+		@Query('idPost') idPost: string,
 		@Query('idUser') idUser: string,
+		@Query('page') page: string,
+		@Query('limit') limit: string,
+		@Query('search') search: string,
+		@Query('createdAt') createdAt: string,
 		@Res() res: Response
 	) {
 		try {
-			const forums = await this.postForumsService.findAll({
+			const response = await this.postForumsService.findAll({
 				idPost: parseInt(idPost),
-				idUser: parseInt(idUser)
+				idUser: parseInt(idUser),
+				search: search,
+				page: parseInt(page),
+				limit: parseInt(limit),
+				createdAt: createdAt
 			});
 			return res.status(200).json({
 				code: 200,
-				forums: forums
+				...response
 			})
 		} catch (error) {
 			return responseError(error,res);
