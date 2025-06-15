@@ -42,6 +42,9 @@ export class UserHistoriesService {
 	async findAll(idUser: number,
 		relations: {
 			post?: boolean
+		} = {},
+		where: {
+			idPost?: number
 		} = {}
 	) {
 		this.userHistoriesValidator.validateIdUser(idUser);
@@ -50,7 +53,12 @@ export class UserHistoriesService {
 				isDeleted: false,
 				user: {
 					id: idUser
-				}
+				},
+				...(where.idPost !== undefined && !isNaN(where.idPost) ? {
+					post: {
+						id: where.idPost
+					}
+				}:{})
 			},
 			relations: {
 				...(relations.post ? {

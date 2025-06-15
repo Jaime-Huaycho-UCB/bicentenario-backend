@@ -238,7 +238,9 @@ export class PostsService {
 
 	async createView(idUser: number,post: Post){
 		try {
-			const history = await this.userHistoriesService.findAll(idUser);
+			const history = await this.userHistoriesService.findAll(idUser,{},{
+				idPost: post.id
+			});
 		} catch (error) {
 			post!.views = post!.views + 1;
 			await this.postRepository.save(post!);
