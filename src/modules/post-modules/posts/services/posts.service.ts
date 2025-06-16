@@ -178,7 +178,9 @@ export class PostsService {
 			'departament',
 			'file',
 			'miniature',
-			'tags'
+			'tags',
+			'post.head',
+			'post.child'
 		]);
 		const [posts, total] = await query.getManyAndCount();
 		this.postsValidator.validatePosts(posts);
@@ -224,7 +226,9 @@ export class PostsService {
 				user: {
 					id: true,
 					name: true
-				}
+				},
+				head: true,
+				child: true
 			}
 		});
 		this.postsValidator.validatePost(post);

@@ -3,6 +3,7 @@ import { FileDto } from "src/modules/files/dto/file.dto";
 import { CityWithDepartamentDto } from "src/modules/location-modules/cities/dto/city.dto";
 import { DtoUserName } from "src/modules/user-modules/users/dto/user.dto";
 import { TagDto } from "../../tag-modules/tags/dto/tag.dto";
+import { number } from "joi";
 
 export class PostPublicDto {
     @ApiProperty({description: 'Id del testimonio',type: Number,nullable: false})
@@ -49,6 +50,12 @@ export class PostPublicDto {
     
     @ApiProperty({description: 'Etiquetas del testimonio',type: [TagDto],nullable: false})
     tags: TagDto[] | null
+
+    @ApiProperty({description: 'Id del testimonio siguiente a este',type: Number,nullable: true})
+    head: number
+
+    @ApiProperty({description: 'Id del testimonio anterior',type: Number,nullable: true})
+    child: number
 }
 export class inPostDto {
     @ApiProperty({description: 'Titulo del testimonio',type: String,nullable: false,required: false})
