@@ -9,6 +9,8 @@ import { OAuth2Client } from "google-auth-library";
 import { UserAuthService } from "src/modules/user-modules/users/services/users-auth.service";
 import { UsersService } from "src/modules/user-modules/users/services/users.service";
 import { EmailService } from "src/micro-services/email/email.service";
+import { LogsService } from "src/modules/logs/services/logs.service";
+import { LogEventEnum } from "src/modules/logs/enums/log-event.enum";
 
 
 @Injectable()
@@ -19,7 +21,8 @@ export class AuthService {
         private readonly jwtService: JwtService,
         private readonly emailService: EmailService,
         private readonly authValidator: AuthValidator,
-        private readonly userAuthService: UserAuthService
+        private readonly userAuthService: UserAuthService,
+        private readonly logsService: LogsService
     ) { }
 
     async login(data: DtoInLogin) {
@@ -33,6 +36,11 @@ export class AuthService {
             rol: user!.rol
         };
         const token = await this.jwtService.signAsync(payload);
+        await this.logsService.create({
+            user: user!,
+            idEvent: LogEventEnum.Acceder,
+            description: `El usuario "${user!.name}" con correo "${user!.email}" inicio sesion`
+        })
         return {
             token: token,
             idUser: user!.id,
@@ -74,6 +82,11 @@ export class AuthService {
             rol: user!.rol
         };
         const token = await this.jwtService.signAsync(payloadOut);
+        await this.logsService.create({
+            user: user!,
+            idEvent: LogEventEnum.Acceder,
+            description: `El usuario "${user!.name}" con correo "${user!.email}" inicio sesion con google`
+        })
         return { token: token };
     }
 
@@ -90,6 +103,11 @@ export class AuthService {
             rol: user.rol,
         };
         const token = await this.jwtService.signAsync(payloadOut);
+        await this.logsService.create({
+            user: user!,
+            idEvent: LogEventEnum.Acceder,
+            description: `El usuario "${user!.name}" con correo "${user!.email}" se registro en el sistema con google`
+        })
         return { token: token };
     }
 

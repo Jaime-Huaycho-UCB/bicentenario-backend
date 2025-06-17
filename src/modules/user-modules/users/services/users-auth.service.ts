@@ -6,6 +6,8 @@ import { UsersService } from "./users.service";
 import { DtoInChangePassword, DtoInRegisterUser } from "src/modules/auth/DTOs/auth-in.dto";
 import { HashService } from "../../../../common/helpers/hash.helper";
 import { UsersValidator } from "./users.validator";
+import { LogsService } from "src/modules/logs/services/logs.service";
+import { LogEventEnum } from "src/modules/logs/enums/log-event.enum";
 
 @Injectable()
 export class UserAuthService {
@@ -14,7 +16,8 @@ export class UserAuthService {
         private readonly userRepository: Repository<User>,
         private readonly userService: UsersService,
         private readonly hashService: HashService,
-        private readonly userValidator: UsersValidator
+        private readonly userValidator: UsersValidator,
+        private readonly logsService: LogsService
     ) { }
 
     async changePassword(data: DtoInChangePassword) {
@@ -49,7 +52,13 @@ export class UserAuthService {
             rol: {id: 4},
             isDeleted: false
         };
+        
         const savedUser = await this.userRepository.save(user);
+        await this.logsService.create({
+            user: savedUser,
+            idEvent: LogEventEnum.Acceder,
+            description: `El usuario "${user!.name}" con correo "${user!.email}" se registro en el sistema`
+        })
         return savedUser;
     }
 }
