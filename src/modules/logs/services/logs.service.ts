@@ -8,31 +8,6 @@ import { UsersService } from 'src/modules/user-modules/users/services/users.serv
 import { LogsValidator } from './logs.validator';
 import { number } from 'joi';
 
-const logEvents = [
-	{
-		id: 1,
-		name: 'insert'
-	}, {
-		id: 2,
-		name: 'update'
-	}, {
-		id: 3,
-		name: 'delete'
-	}, {
-		id: 4,
-		name: 'get',
-	}, {
-		id: 5,
-		name: 'login'
-	}, {
-		id: 6,
-		name: 'register'
-	}, {
-		id: 7,
-		name: 'interaction'
-	}
-];
-
 @Injectable()
 export class LogsService {
 	constructor(
@@ -41,6 +16,23 @@ export class LogsService {
 		private readonly logsValidator: LogsValidator,
 		private readonly usersService: UsersService
 	) { }
+
+	logEvents = [
+		{ id: 1, name: 'Crear' },
+		{ id: 2, name: 'Actualizar' },
+		{ id: 3, name: 'Eliminar' },
+		{ id: 4, name: 'Leer' },
+		{ id: 5, name: 'Cargar' },
+		{ id: 6, name: 'Descargar' },
+		{ id: 7, name: 'Iniciar' },
+		{ id: 8, name: 'Cerrar' },
+		{ id: 9, name: 'Acceder' },
+		{ id: 10, name: 'Registrar' },
+		{ id: 11, name: 'Procesar' },
+		{ id: 12, name: 'Responder' },
+		{ id: 13, name: 'Validar' },
+		{ id: 14, name: 'Rechazar' }
+	];
 
 	async create(data: CreateLogDto) {
 		this.logsValidator.validateCreate(data);
@@ -58,13 +50,13 @@ export class LogsService {
 	}
 
 	async findAllEvents() {
-		const events = logEvents;
+		const events = this.logEvents;
 		return events;
 	}
 
 	async existEvent(idEvent: number){
-		for (let i=0;i<logEvents.length;i++){
-			if (logEvents[i].id === idEvent){
+		for (let i=0;i<this.logEvents.length;i++){
+			if (this.logEvents[i].id === idEvent){
 				return true;
 			}
 		}
@@ -124,7 +116,7 @@ export class LogsService {
 		logs.map((log) => {
 			logsEnd.push({
 				id: log.id,
-				event: logEvents[log.event - 1],
+				event: this.logEvents[log.event - 1],
 				user: log.user,
 				description: log.description,
 				createdAt: log.createdAt
@@ -141,9 +133,9 @@ export class LogsService {
 
 	async findOneEvent(idEvent: number){
 		let event;
-		for (let i=0;i<logEvents.length;i++){
-			if (logEvents[i].id === idEvent){
-				return logEvents[i];
+		for (let i=0;i<this.logEvents.length;i++){
+			if (this.logEvents[i].id === idEvent){
+				return this.logEvents[i];
 			}
 		}
 		return event;

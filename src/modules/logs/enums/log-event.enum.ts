@@ -1,0 +1,16 @@
+export enum LogEventEnum {
+  Crear       = 1,
+  Actualizar  = 2,
+  Eliminar    = 3,
+  Leer        = 4,
+  Cargar      = 5,
+  Descargar   = 6,
+  Iniciar     = 7,
+  Cerrar      = 8,
+  Acceder     = 9,
+  Registrar   = 10,
+  Procesar    = 11,
+  Responder   = 12,
+  Validar     = 13,
+  Rechazar    = 14,
+}
