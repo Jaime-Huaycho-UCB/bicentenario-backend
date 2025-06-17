@@ -11,6 +11,7 @@ import { PostsService } from 'src/modules/post-modules/posts/services/posts.serv
 import { CommentsService } from 'src/modules/post-modules/comment-modules/comments/services/comments.service';
 import { getPostComplaintTemplate } from '../templates/post-complaint.template';
 import { getComplaintCommentTemplate } from '../templates/comment-complaint.template';
+import { ComplaintsValidator } from './complaints.validator';
 
 @Injectable()
 export class ComplaintsService {
@@ -25,7 +26,8 @@ export class ComplaintsService {
 		private readonly objectsComplaintsService: ObjectsComplaintsService,
 		private readonly postsService: PostsService,
 		private readonly commentsService: CommentsService,
-		private readonly emailService: EmailService
+		private readonly emailService: EmailService,
+		private readonly complaintValidator: ComplaintsValidator
 	) { }
 
 	async create(data: CreateComplaintDto) {
@@ -81,7 +83,8 @@ export class ComplaintsService {
 		return complaints;
 	}
 
-	async findOne(id: number) {
+	async findOne(id: number,replace = true) {
+		this.complaintValidator.validateId(id);
 		let complaint = await this.complaintRepository.findOne({
 			where: {
 				id: id
@@ -91,9 +94,11 @@ export class ComplaintsService {
 				objectType: true
 			}
 		});
-		const object = await this.getObject(complaint!.object,complaint?.objectType.id);
-		complaint!.object = object;
 		
+		if (replace){
+			const object = await this.getObject(complaint!.object,complaint?.objectType.id);
+			complaint!.object = object;
+		}
 
 		return complaint;
 	}
@@ -108,6 +113,12 @@ export class ComplaintsService {
 			});
 		}
 		return object;
+	}
+
+	async review(idComplaint: number){
+		const complaint = await this.findOne(idComplaint,false);
+		complaint!.isRevised = true;
+		return await this.complaintRepository.save(complaint!);
 	}
 
 	update(id: number, updateComplaintDto: UpdateComplaintDto) {

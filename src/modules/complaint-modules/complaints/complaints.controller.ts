@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, Put } from '@nestjs/common';
 import { ComplaintsService } from './services/complaints.service';
 import { CreateComplaintDto } from './dto/create-complaint.dto';
 import { UpdateComplaintDto } from './dto/update-complaint.dto';
@@ -6,7 +6,7 @@ import { Response } from 'express';
 import { responseError } from 'src/common/helpers/out.helper';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetComplaintsDto } from './dto/get-complaints.dto';
-import { DtoResponse, swaggerRes404, swaggerRes500 } from 'src/common/helpers/classes.dto';
+import { DtoResponse, swaggerRes400, swaggerRes404, swaggerRes500 } from 'src/common/helpers/classes.dto';
 
 @ApiTags('Denuncias de contenido')
 @Controller('complaints')
@@ -62,18 +62,23 @@ export class ComplaintsController {
 		}
 	}
 
-	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.complaintsService.findOne(+id);
-	}
-
-	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateComplaintDto: UpdateComplaintDto) {
-		return this.complaintsService.update(+id, updateComplaintDto);
-	}
-
-	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.complaintsService.remove(+id);
+	@ApiOperation({summary: 'Api para marcar como revisado la denuncia'})
+	@Put(':idComplaint')
+	@ApiResponse({
+		description: 'Respuesta en caso de poner como revisado la denuncia',
+		status: 200,
+		type: DtoResponse
+	})
+	@ApiResponse(swaggerRes400())
+	async review(@Param('idComplaint') idComplaint: string,@Res() res: Response){
+		try {
+			const response = await this.complaintsService.review(parseInt(idComplaint));
+			return res.status(200).json({
+				code: 200,
+				mensaje: 'Se marco como revisado la denuncia de forma exitosa'
+			})
+		} catch (error) {
+			return responseError(error,res);
+		}
 	}
 }
