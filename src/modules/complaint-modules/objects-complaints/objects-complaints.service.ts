@@ -16,8 +16,9 @@ export class ObjectsComplaintsService {
 		return 'This action adds a new objectsComplaint';
 	}
 
-	findAll() {
-		return `This action returns all objectsComplaints`;
+	async findAll() {
+		const types = await this.objectsComplaintRepository.find();
+		return types;
 	}
 
 	async findOne(id: number) {
