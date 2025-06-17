@@ -36,9 +36,14 @@ export class EventForumsController {
 	}
 
 	// @UseGuards(AuthGuard)
-	@Get(':idEvent')
+	@Get()
 	@ApiOperation({ summary: 'Api para obtener los foros' })
+	@ApiQuery({name: 'idEvent',description: 'Para filtrar por evento',required: false})
 	@ApiQuery({ name: 'idUser', description: 'Filtrar por usuario, util para obtener los foros creados por un usuario', required: false })
+	@ApiQuery({name: 'search',description: 'Para buscar por titulo',required: false})
+	@ApiQuery({name: 'page',description: 'Pagina',required: false})
+	@ApiQuery({name: 'limit',description: 'Lite de foros de retorno',required: false})
+	@ApiQuery({name: 'createdAt',description: 'Devolver por orden',required: false,enum: ['DESC','ASC']})
 	@ApiResponse({
 		description: 'Respuesta en caso de obtener los fotos exitosamente',
 		status: 200,
@@ -48,18 +53,26 @@ export class EventForumsController {
 	@ApiResponse(swaggerRes401())
 	@ApiResponse(swaggerRes404())
 	async findAll(
-		@Param('idEvent') idEvent: string,
+		@Query('idEvent') idEvent: string,
 		@Query('idUser') idUser: string,
+		@Query('page') page: string,
+		@Query('limit') limit: string,
+		@Query('search') search: string,
+		@Query('createdAt') createdAt: string,
 		@Res() res: Response
 	) {
 		try {
-			const forums = await this.eventForumsService.findAll({
+			const response = await this.eventForumsService.findAll({
 				idEvent: parseInt(idEvent),
-				idUser: parseInt(idUser)
+				idUser: parseInt(idUser),
+				search: search,
+				page: parseInt(page),
+				limit: parseInt(limit),
+				createdAt: createdAt
 			});
 			return res.status(200).json({
 				code: 200,
-				forums: forums
+				...response
 			})
 		} catch (error) {
 			return responseError(error, res);

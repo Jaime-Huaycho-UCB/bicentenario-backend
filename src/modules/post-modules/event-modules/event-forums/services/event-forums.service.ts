@@ -3,7 +3,7 @@ import { CreateEventForumDto } from '../dto/create-event-forum.dto';
 import { UpdateEventForumDto } from '../dto/update-event-forum.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventForum } from '../entities/event-forum.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { EventForumsValidator } from './event-forums.validator';
 import { PostsService } from 'src/modules/post-modules/posts/services/posts.service';
 import { UsersService } from 'src/modules/user-modules/users/services/users.service';
@@ -33,9 +33,16 @@ export class EventForumsService {
 	
 		async findAll(filters: {
 			idUser?: number,
-			idEvent?: number
+			idEvent?: number,
+			search?: string,
+			page?: number,
+			limit?: number,
+			createdAt?: string
 		} = {}) {
-			const forums = await this.eventForumRepository.find({
+			const page = isNaN(Number(filters.page)) ? 1 : Number(filters.page);
+			const limit = isNaN(Number(filters.limit)) ? 10 : Number(filters.limit);
+			const skip = (page - 1) * limit;
+			const [forums,total] = await this.eventForumRepository.findAndCount({
 				where: {
 					isDeleted: false,
 					...(filters.idEvent !== undefined && !isNaN(Number(filters.idEvent)) ? {
@@ -47,6 +54,9 @@ export class EventForumsService {
 						user: {
 							id: filters.idUser
 						}
+					} : {}),
+					...(filters.search ? {
+						title: Like(`%${filters.search.trim()}%`)
 					} : {})
 				},
 				relations: {
@@ -61,10 +71,25 @@ export class EventForumsService {
 						id: true,
 						name: true
 					}
-				}
+				},
+				order: {
+					...(filters.createdAt ? {
+						createdAt: (filters.createdAt === 'ASC' ? 'ASC' : 'DESC')
+					}:{
+						createdAt: 'DESC'
+					})
+				},
+				skip: skip,
+				take: limit
 			})
 			this.eventForumsValidator.validateForums(forums);
-			return forums;
+			return {
+				forums: forums,
+				total: total,
+				page: page,
+				limit: limit,
+				pages: Math.ceil(total / limit)
+			};
 		}
 	
 		async findOne(idForum: number,relations: {
