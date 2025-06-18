@@ -32,7 +32,7 @@ export class UserAuthService {
         return true;
     }
 
-    async registerUser(data: DtoInRegisterUser) {
+    async registerUser(data: DtoInRegisterUser,idRol: number = 4) {
         this.userValidator.validateInRegisterUser(data);
         try {
             const comp = await this.userService.getAUser(data.email);
@@ -49,7 +49,7 @@ export class UserAuthService {
             password: data.password ? await this.hashService.hash(data.password!) : undefined,
             age: data.age,
             strikes: 0,
-            rol: {id: 4},
+            rol: {id: idRol},
             isDeleted: false
         };
         

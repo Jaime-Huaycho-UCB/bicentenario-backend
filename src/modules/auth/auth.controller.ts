@@ -132,6 +132,48 @@ export class AuthController {
         }
     }
 
+    @Post('/register/admin')
+    @ApiOperation({ summary: 'Api para registrar a nuevos usuarios administradores' })
+    @ApiResponse({
+        description: 'Respuesta en caso de exito al registrar al usuario',
+        status: 201,
+        type: DtoOutRegisterUser
+    })
+    @ApiResponse(swaggerRes500())
+    async registerUserAdmin(@Body() data: DtoInRegisterUser, @Res() res: Response) {
+        try {
+            const savedUser = await this.userAuthService.registerUser(data,1);
+            return res.status(200).json({
+                code: 201,
+                user: savedUser,
+                message: 'El usuario se registro exitosamente'
+            });
+        } catch (error) {
+            return responseError(error,res);
+        }
+    }
+
+    @Post('/register/curator')
+    @ApiOperation({ summary: 'Api para registrar a nuevos usuarios curadores' })
+    @ApiResponse({
+        description: 'Respuesta en caso de exito al registrar al usuario',
+        status: 201,
+        type: DtoOutRegisterUser
+    })
+    @ApiResponse(swaggerRes500())
+    async registerUserCurator(@Body() data: DtoInRegisterUser, @Res() res: Response) {
+        try {
+            const savedUser = await this.userAuthService.registerUser(data,2);
+            return res.status(200).json({
+                code: 201,
+                user: savedUser,
+                message: 'El usuario se registro exitosamente'
+            });
+        } catch (error) {
+            return responseError(error,res);
+        }
+    }
+
     @Post('/register-google')
     @ApiOperation({ summary: 'Api para registrar a nuevos usuarios con google' })
     @ApiResponse({
