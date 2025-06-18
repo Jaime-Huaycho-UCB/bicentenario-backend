@@ -2,8 +2,8 @@ import { HttpException, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 // import { EmailService } from "src/Services/Email/Email.service";
 import { generateCode } from "../auth.util";
-import { htmlRestorePassword } from "../auth.template";
-import { DtoInLogin } from "../DTOs/auth-in.dto";
+import { htmlRestorePassword, htmlTwoFactorVerification } from "../auth.template";
+import { DtoInLogin, DtoVerify2AF } from "../DTOs/auth-in.dto";
 import { AuthValidator } from "./auth.validator";
 import { OAuth2Client } from "google-auth-library";
 import { UserAuthService } from "src/modules/user-modules/users/services/users-auth.service";
@@ -11,6 +11,7 @@ import { UsersService } from "src/modules/user-modules/users/services/users.serv
 import { EmailService } from "src/micro-services/email/email.service";
 import { LogsService } from "src/modules/logs/services/logs.service";
 import { LogEventEnum } from "src/modules/logs/enums/log-event.enum";
+import { MyConfigService } from "src/config/config.service";
 
 
 @Injectable()
@@ -22,7 +23,8 @@ export class AuthService {
         private readonly emailService: EmailService,
         private readonly authValidator: AuthValidator,
         private readonly userAuthService: UserAuthService,
-        private readonly logsService: LogsService
+        private readonly logsService: LogsService,
+        private configService: MyConfigService,
     ) { }
 
     async login(data: DtoInLogin) {
@@ -30,6 +32,59 @@ export class AuthService {
         const user = await this.userService.getAUser(data.email,true);
         this.authValidator.validatePasswordToGoogle(user);
         await this.authValidator.validatePasswordCorrect(data.password, user!.password);
+
+        if (user!.rol.id === 1 || user!.rol.id === 2){
+            const token2AF = await this.jwtService.signAsync({
+                user: {
+                    id: user!.id,
+                    rol: user!.rol
+                }
+            })
+            const code2AF = await this.generate6DigitCode();
+            const email = await this.emailService.sendEmail({
+                destination: user!.email,
+                title: 'Verificacion de 2 pasos',
+                html: htmlTwoFactorVerification(code2AF)
+            })
+            return {
+                required2AF: true,
+                code: code2AF,
+                token2AF: token2AF
+            }
+        }
+
+        const payload = {
+            idUser: user!.id,
+            email: user!.email,
+            rol: user!.rol
+        };
+        const secret = this.configService.getJwtConfig().secret ?? 'defaultSecret';
+        const token = await this.jwtService.signAsync(payload, { secret: secret });
+        await this.logsService.create({
+            user: user!,
+            idEvent: LogEventEnum.Acceder,
+            description: `El usuario "${user!.name}" con correo "${user!.email}" inicio sesion`
+        })
+        return {
+            required2AF: false,
+            token: token,
+            idUser: user!.id,
+            rol: user!.rol
+        };
+    }
+
+    async verify2AF(data: DtoVerify2AF){
+        const secret = this.configService.getJwtConfig().secret;
+        console.log(secret);
+        let payloadIn;
+        try {
+            payloadIn = await this.jwtService.verifyAsync(data.token2AF, {
+                secret: secret ?? 'secret'
+            });
+        } catch (error) {
+            throw new HttpException('Tiempo para verificaion de 2 pasos expirado o token invalido',400)
+        }
+        const user = await this.userService.getAUserById(payloadIn.user.id);
         const payload = {
             idUser: user!.id,
             email: user!.email,
@@ -42,10 +97,12 @@ export class AuthService {
             description: `El usuario "${user!.name}" con correo "${user!.email}" inicio sesion`
         })
         return {
+            required2AF: false,
             token: token,
             idUser: user!.id,
             rol: user!.rol
         };
+
     }
 
     async restorePassword(email: string) {
@@ -121,4 +178,8 @@ export class AuthService {
         this.authValidator.validatePayload(payload);
         return payload!;
     }
+    async generate6DigitCode(){
+        const code = Math.floor(100000 + Math.random() * 900000);
+        return code;
+    };
 }

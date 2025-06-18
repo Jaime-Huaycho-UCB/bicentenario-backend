@@ -1,9 +1,9 @@
 import { Body, Controller, Post, Put, Res } from "@nestjs/common";
 import { AuthService } from "./services/auth.service";
 import { Response } from "express";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { DtoInChangePassword, DtoInLogin, DtoInRegisterUser, DtoInRestorePassword } from "./DTOs/auth-in.dto";
-import { DtoOutLogin, DtoOutRegisterUser, DtoOutRestorePassword } from "./DTOs/auth.out.dto";
+import { ApiOperation, ApiProperty, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { DtoInChangePassword, DtoInLogin, DtoInRegisterUser, DtoInRestorePassword, DtoVerify2AF } from "./DTOs/auth-in.dto";
+import { DtoOutLogin, DtoOutLogin2AF, DtoOutRegisterUser, DtoOutRestorePassword } from "./DTOs/auth.out.dto";
 import { DtoResponse, swaggerRes500 } from "src/common/helpers/classes.dto";
 import { responseError } from "src/common/helpers/out.helper";
 import { UserAuthService } from "../user-modules/users/services/users-auth.service";
@@ -17,11 +17,19 @@ export class AuthController {
     ) { }
 
     @Post('/login')
-    @ApiOperation({ summary: 'Api para el inicio de sesion en la app' })
+    @ApiOperation({ 
+        summary: 'Api para el inicio de sesion en la app',
+        description: 'Existen 2 casos en los que de inicio de sesion, donde el parametro (required2AF) si es (false) el inicio de sesion del usuario sera directo por no tener verificacion de de 2 pasos, si es (true) se retornara un codigo y token para posterior hacer la verificacion de 2 pasos junto con el correo del usuario'
+    })
     @ApiResponse({
         description: 'Respuesta en caso de credenciales correctas',
         status: 200,
         type: DtoOutLogin
+    })
+    @ApiResponse({
+        description: 'respuesta en caso de nesistar verificacion de 2 pasos',
+        status: 202,
+        type: DtoOutLogin2AF
     })
     @ApiResponse({
         description: 'Respuesta en caso de usuario no registrado',
@@ -36,12 +44,42 @@ export class AuthController {
     @ApiResponse(swaggerRes500())
     async login(@Body() data: DtoInLogin, @Res() res: Response) {
         try {
-            const token = await this.authService.login(data);
+            const response = await this.authService.login(data);
+
+            return res.status(response.required2AF ? 202:200).json(response.required2AF ? {
+                code: 202,
+                message: 'Se envio un codigo a tu correo para la verificacion de 2 pasos',
+                ...response
+            }:{
+                code: 200,
+                message: 'Se inicio sesion exitosamente',
+                ...response
+            });
+        } catch (error) {
+            return responseError(error,res);
+        }
+    }
+
+    @ApiOperation({summary: 'Api para verificar token de 2AF'})
+    @Post('/verify-2af')
+    @ApiResponse({
+        description: 'Respuesta en caos de aceptar el token e iniciar sesion exitosamente',
+        status: 200,
+        type: DtoOutLogin
+    })
+    @ApiResponse({
+        description: 'Respuesta en caos de token invalido',
+        status: 400,
+        type: DtoResponse
+    })
+    async verify2AF(@Body() data: DtoVerify2AF,@Res() res: Response){
+        try {
+            const response = await this.authService.verify2AF(data);
             return res.status(200).json({
                 code: 200,
-                message: 'Inicio de sesion exitoso',
-                ...token
-            });
+                message: 'Se inicio sesion exitosamente',
+                ...response
+            })
         } catch (error) {
             return responseError(error,res);
         }

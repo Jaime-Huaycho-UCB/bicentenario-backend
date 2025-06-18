@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
+import { string } from "joi"
 
 export class DtoInLogin {
     @ApiProperty({description: 'Correo del usuario',type: String,nullable: false})
@@ -33,4 +34,9 @@ export class DtoInChangePassword {
 
     @ApiProperty({description: 'Nueva contrasena',type: String,nullable: false})
     password: string
+}
+
+export class DtoVerify2AF {
+    @ApiProperty({description: 'token de 2AF',type: String})
+    token2AF: string
 }
